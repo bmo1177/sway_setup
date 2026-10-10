@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+# sway-wallpaper — wallpaper picker + dynamic theming.
+# Port of binnewbs' wppicker.sh (rofi + swww + matugen) for sway + fuzzel.
+# Bound to $mod+w in ~/.config/sway/config. `--apply` skips the picker and
+# applies ~/.config/sway/current_wallpaper (used at sway startup).
+#
+# Behaviour:
+#   1. Pick a wallpaper from ~/Pictures/wallpapers via fuzzel (newest first).
+#   2. Update ~/.config/sway/current_wallpaper symlink (lock screen, etc.).
+#   3. Recolour via matugen, then set the wallpaper live (awww, else swaymsg).
+#
+# NOTE: `matugen image` is broken in matugen 4.0.0 on nixpkgs (fails with
+# "IO error: not a terminal" on every image, exit 1) — so instead: ffmpeg
+# shrinks the image to 1px for the average color, and `matugen color hex`
+# (which works) regenerates waybar/foot/fuzzel/sway/gtk templates.
+set -euo pipefail
+
+WALLPAPER_DIR="$HOME/Pictures/wallpapers"
+SYMLINK_PATH="$HOME/.config/sway/current_wallpaper"
+
+ensure_daemon() {
+    if ! pgrep -f '[a]www-daemon( |$)' >/dev/null 2>&1; then
+        awww-daemon >/dev/null 2>&1 &
+        for _ in $(seq 1 20); do
+            awww query >/dev/null 2>&1 && break
+            sleep 0.25
+        done
+    fi
+}
+
+avg_hex() {
+    ffmpeg -hide_banner -v error -i "$1" \
+        -vf "scale=1:1" -pix_fmt rgb24 -f rawvideo - 2>/dev/null \
+        | od -A n -t u1 | awk '{printf "%02x%02x%02x", $1, $2, $3}'
+}
+
+set_live() {
+    if pgrep -f '[a]www-daemon( |$)' >/dev/null 2>&1 && command -v awww >/dev/null 2>&1; then
+        awww img "$1" --transition-type any --transition-fps 60
+    elif [ -n "${SWAYSOCK:-}" ]; then
+        swaymsg output '"*"' bg "$1" fill
+    fi
+}
+
+apply_wallpaper() {
+    local selected="$1" hex
+    mkdir -p "$(dirname "$SYMLINK_PATH")"
+    ln -sfn "$selected" "$SYMLINK_PATH"
+    ensure_daemon
+    hex="$(avg_hex "$selected")"
+    if [ -n "${hex:-}" ] && command -v matugen >/dev/null 2>&1; then
+        if ! matugen color hex "$hex" >/dev/null 2>&1; then
+            notify-send 'Theme update failed' "matugen color $hex failed; wallpaper still applied"
+        fi
+    fi
+    set_live "$selected"
+    notify-send 'Wallpaper updated' "$(basename "$selected")${hex:+ · theme #$hex}"
+}
+
+if [ "${1:-}" = "--apply" ]; then
+    [ -e "$SYMLINK_PATH" ] || exit 0
+    # Resolve the symlink: awww/matugen want the real file, not the link.
+    apply_wallpaper "$(readlink -f "$SYMLINK_PATH")"
+    exit 0
+fi
+
+cd "$WALLPAPER_DIR" || exit 1
+
+choice="$(find "$WALLPAPER_DIR" -maxdepth 1 -type f \
+    \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.gif' -o -iname '*.webp' \) \
+    -printf '%T@ %f\n' | sort -rn | cut -d' ' -f2- \
+    | fuzzel --dmenu --prompt 'Wallpaper: ')" || exit 0
+[ -z "${choice:-}" ] && exit 0
+SELECTED_PATH="$WALLPAPER_DIR/$choice"
+[ -f "$SELECTED_PATH" ] || exit 1
+
+apply_wallpaper "$SELECTED_PATH"

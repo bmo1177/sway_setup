@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# sway-lock — lock screen on the current wallpaper.
+# Port of binnewbs' hyprlock.sh (which blurs current_wallpaper) for swaylock.
+set -euo pipefail
+
+WALLPAPER="$HOME/.config/sway/current_wallpaper"
+ARGS=(-f --color 11111b --inside-color 1e1e2e --inside-clear-color 1e1e2e \
+    --inside-caps-lock-color 1e1e2e --inside-ver-color 1e1e2e --inside-wrong-color 1e1e2e \
+    --ring-color cba6f7 --ring-clear-color f9e2af --ring-caps-lock-color f38ba8 \
+    --ring-ver-color a6e3a1 --ring-wrong-color f38ba8 --key-hl-color a6e3a1 \
+    --line-color 1e1e2e --separator-color cba6f7 --text-color cdd6f4)
+
+if [ -f "$WALLPAPER" ]; then
+    exec swaylock -i "$WALLPAPER" "${ARGS[@]}"
+else
+    exec swaylock "${ARGS[@]}"
+fi

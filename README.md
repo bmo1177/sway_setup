@@ -1,176 +1,70 @@
-Here is a comprehensive `README.md` file designed to help you and others easily install, configure, and enjoy Sway alongside your existing desktop environments.
+# sway_setup — Catppuccin Mocha Sway rice on NixOS
 
-***
+My daily-driver Sway setup: SwayFX + islands-style Waybar, wallpaper-driven
+theming (matugen), 12 workspaces, 50-wallpaper collection, Flatpak creative apps,
+and a full recording setup for tech content. Built on NixOS 26.05 alongside GNOME.
 
-# Sway on Debian 13 (Trixie) - A Beginner's Guide
+## What's inside
 
-This guide helps beginners install the **Sway Window Manager** on **Debian 13 (Trixie)** alongside existing desktop environments like GNOME and Xfce. It also covers how to scale the interface for smaller laptop screens (e.g., 14-inch displays).
+| Area | Details |
+|---|---|
+| Compositor | SwayFX 0.5.3 (blur, shadows, rounded corners), 14" 1080p @ 1.25 scale via kanshi |
+| Theme | Catppuccin Mocha everywhere; `Super+W` picker recolors bar, terminal, launcher, GTK from the wallpaper |
+| Bar | Waybar islands: 6 quick launchers, numbered workspaces 1–12, notify drawer, audio, power |
+| Notifications | swaync (themed) · Power menu: wlogout (themed) |
+| Launcher | fuzzel (drun, clipboard history, wallpaper picker, cheatsheet) |
+| Extras | Alt+Tab + Super+Tab window switchers (swayr), focus mode, keystroke overlay (wshowkeys), night light (gammastep) |
+| Apps | OBS Studio, Kdenlive, FilmCraft, PhotoCraft, PdfCraft (Flatpaks), Obsidian, Warp, VS Code |
+| Recording | OBS (RNNoise mic filter built in), wf-recorder clips, swappy annotate |
 
-## 🚀 Why Sway?
-- **Tiling**: Automatically arranges windows side-by-side (no more dragging/resizing).
-- **Lightweight**: Uses far fewer resources than GNOME or KDE.
-- **Wayland-native**: Built for modern Linux graphics, replacing the older X11.
-- **Safe Coexistence**: Runs peacefully alongside your current desktops; you choose which one to use at login.
+## Repo layout
 
-***
-
-## 📦 1. Installation
-
-You don't need to remove anything. We will just add Sway packages.
-
-### Step 1: Update your system
-Open your terminal and ensure your Debian system is up-to-date:
-```bash
-sudo apt update && sudo apt upgrade -y
+```
+config/        # dotfiles, mirrored 1:1 to ~/.config/ (sway, waybar, foot,
+               #   fuzzel, swaync, wlogout, swayr, matugen, mako, kanshi,
+               #   gammastep, fontconfig)
+nixos/         # sway-binnewbs-snippet.nix — packages for configuration.nix
 ```
 
-### Step 2: Install Sway and Essentials
-This installs the window manager, screen locker, background manager, and idle daemon.
-```bash
-sudo apt install sway swaybg swayidle swaylock foot -y
-```
+Wallpapers live in `~/Pictures/wallpapers/` (50 and counting, not vendored here).
 
-### Step 3: Install Recommended Tools
-These make Sway usable for daily tasks (status bar, app menu, file manager, screenshots, etc.).
-```bash
-sudo apt install waybar wofi grim slurp wl-clipboard fonts-font-awesome thunar nwg-look -y
-```
-* **waybar**: Top status bar.
-* **wofi**: Application menu (launcher).
-* **grim/slurp**: Screenshot tools.
-* **nwg-look**: GUI tool to easily change GTK/App themes and font sizes.
+## Install on NixOS
 
-
-#### Using the Video's Installation Script (Optional)
-The video showcases a custom installation script from the creator's Codeberg repository. As a beginner, I recommend starting with the manual installation steps above rather than using automated scripts, as this helps you understand what's being installed. However, if you're interested in the video creator's complete configuration, the script is available at:
-
-bash
-```bash
-git clone https://codeberg.org/justaguylinux/sway-setup
-cd sway-setup
-chmod +x install.sh
-./install.sh
-```
-The script installs Sway with pre-configured settings and additional tools (demonstrated from 3:37 to 14:33 in the video https://youtu.be/sKOWqAm70jc).​
-
-***
-
-## ⚙️ 2. Configuration
-
-Sway doesn't have a "settings menu" like GNOME; it uses a simple text file.
-
-### Step 1: Create Config Directories
-```bash
-mkdir -p ~/.config/sway
-mkdir -p ~/.config/waybar
-mkdir -p ~/.config/wofi
-```
-
-### Step 2: Copy Default Config
-Copy the default configuration to your user folder so you can edit it safely:
-```bash
-cp /etc/sway/config ~/.config/sway/config
-```
-
-***
-
-## 🖥️ 3. Fixing Small Fonts (For 14" Laptops)
-
-If everything looks tiny on your laptop screen, use one of these two methods.
-
-### Option A: The "Easy" Global Scale (Recommended)
-This acts like a zoom for the entire interface.
-
-1. Open your config file:
+1. Add the packages from `nixos/sway-binnewbs-snippet.nix` to
+   `programs.sway.extraPackages` (plus `obs-studio`, `kdePackages.kdenlive`,
+   `nwg-look`, `dpkg`), enable `services.flatpak`, then:
    ```bash
-   nano ~/.config/sway/config
+   sudo nixos-rebuild switch
    ```
-2. Scroll to the bottom and add this line:
-   ```text
-   output * scale 1.2
+2. Copy configs into place (back yours up first):
+   ```bash
+   cp -r config/* ~/.config/
+   ln -sfn ~/Pictures/wallpapers/<your-pick> ~/.config/sway/current_wallpaper
    ```
-   *(Try 1.2, 1.25, or 1.5 depending on your preference.)*
-3. Save (`Ctrl+O`, `Enter`) and Exit (`Ctrl+X`).
-4. Reload Sway with `Super+Shift+R` (Super is the Windows/Command key).
+3. Log out → pick **Sway** at the login screen → log back in.
+4. Flatpaks: `flatpak remote-add --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo`,
+   then install the `.flatpak` bundles from each app's GitHub releases.
+5. Rebuild notes: `swww` was renamed to `awww` in nixpkgs; Kdenlive lives at
+   `kdePackages.kdenlive`; `matugen image` is broken in 4.0.0 — this setup works
+   around it (ffmpeg average color → `matugen color`, see `config/sway/scripts/sway-wallpaper`).
 
-### Option B: The "Manual" Fine-Tuning
-If you prefer to just enlarge text without scaling the whole UI:
+## Keybindings (`Super` = Windows key, full list on `Super+/`)
 
-**1. Window Titles:**
-Edit `~/.config/sway/config`:
-```text
-font pango:monospace 11  # Change 8 to 11 or 12
-```
+| Keys | Action |
+|---|---|
+| Super+Return / D / E / B / C / N | Terminal / launcher / Files / browser / Code / Obsidian |
+| Super+Q, Super+F, Super+Shift+F | Close / fullscreen / focus mode (fullscreen + hide bar) |
+| Super+1..0, Super+F11/F12 | Workspaces 1–12 (Shift moves windows) |
+| Alt+Tab, Super+Tab | Window / workspace switcher |
+| Super+W | Wallpaper picker + auto-theme |
+| Super+Shift+E / Super+Ctrl+L | Power menu / lock |
+| Super+Shift+X | Screen off/on toggle |
+| Super+I | Keystroke overlay (recordings) |
+| Super+O | Idle-inhibit toggle |
+| Print / Super+Print / Super+Shift+S | Screenshots (region/file/annotate) |
+| Super+Ctrl+V | Clipboard history |
 
-**2. Top Bar (Waybar):**
-Edit `~/.config/waybar/style.css` (create if missing):
-```css
-* {
-    font-size: 16px;
-}
-```
+## Credits
 
-**3. App Menu (Wofi):**
-Edit `~/.config/wofi/style.css`:
-```css
-window {
-    font-size: 18px;
-}
-```
-
-**4. GTK Apps (Files, Firefox):**
-Open the **nwg-look** app you installed earlier and increase the font size there.
-
-***
-
-## 🎮 4. How to Login
-
-1. **Log out** of your current session (GNOME/Xfce).
-2. At the login screen, click your username.
-3. Look for a **Gear Icon** (usually bottom right or top right).
-4. Select **Sway**.
-5. Enter your password and login.
-
-*To go back, just log out and select GNOME or Xfce again.*
-
-***
-
-## ⌨️ 5. Cheat Sheet: Essential Shortcuts
-
-Sway is keyboard-driven. The "Super" key is usually the Windows/Command key.
-
-| Action | Shortcut |
-| :--- | :--- |
-| **Open Terminal** | `Super + Enter` |
-| **Open App Menu** | `Super + Space` |
-| **Close Window** | `Super + Shift + Q` |
-| **Reload Config** | `Super + Shift + R` |
-| **Exit Sway** | `Super + Shift + E` |
-| **Move Focus** | `Super + Arrow Keys` |
-| **Move Window** | `Super + Shift + Arrow Keys` |
-| **Toggle Fullscreen** | `Super + F` |
-| **Layout: Tiled** | `Super + E` |
-| **Layout: Tabbed** | `Super + W` |
-
-***
-
-## ⚠️ Troubleshooting
-
-*   **NVIDIA Users**: If you have an NVIDIA card and Sway won't start, use the `--my-next-gpu-wont-be-nvidia` flag (yes, really) or check the [Debian Wiki](https://wiki.debian.org/sway) for proprietary driver workarounds.
-*   **Missing Configs**: If your bar (Waybar) is missing, copy its default config too:
-    ```bash
-    cp /etc/xdg/waybar/config ~/.config/waybar/config
-    cp /etc/xdg/waybar/style.css ~/.config/waybar/style.css
-    ```
-
-Enjoy your fast, efficient, and beautiful Linux desktop
-
-[1](https://wiki.debian.org/sway)
-[2](https://www.reddit.com/r/debian/comments/vxjrs9/swaywm_installation_guide/)
-[3](https://simondalvai.org/blog/debian-sway-v1/)
-[4](https://github.com/Tong-ST/debian_sway)
-[5](https://www.youtube.com/watch?v=sKOWqAm70jc)
-[6](https://www.youtube.com/watch?v=GCDRZSFDFxo)
-[7](https://wiki.debian.org/DesktopEnvironment)
-[8](https://swaywm.org)
-[9](https://forum.clockworkpi.com/t/how-to-install-sway-to-the-uconsole-on-cm5/19960)
+Binnewbs/arch-hyprland and JaKooLit for the rice ideas; Catppuccin, SwayFX,
+Waybar, swaync, wlogout, fuzzel, matugen, awww, swayr, ArtCraft crew.

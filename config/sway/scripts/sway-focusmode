@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# sway-focusmode — total-focus toggle ($mod+Shift+f).
+# Fullscreens the focused window AND hides waybar, so only the page remains
+# (no wallpaper, no bar). Run again to restore both.
+# State file tracks OUR toggles; if you hand-toggle the bar ($mod+Ctrl+h)
+# or fullscreen ($mod+f) mid-session, run it twice to resync.
+set -euo pipefail
+
+STATE="$HOME/.cache/sway-focusmode"
+
+if [ -f "$STATE" ]; then
+    swaymsg fullscreen disable
+    rm -f "$STATE"
+    pkill -SIGUSR1 -f '^waybar( |$)' || true
+    notify-send 'Focus mode off' || true
+else
+    # Fullscreen first: on an empty workspace this fails and aborts
+    # (set -e) with no side effects — no stale state, bar untouched.
+    swaymsg fullscreen enable
+    touch "$STATE"
+    pkill -SIGUSR1 -f '^waybar( |$)' || true
+    notify-send 'Focus mode on — Super+Shift+F to exit' || true
+fi

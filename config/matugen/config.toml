@@ -1,0 +1,35 @@
+# Matugen config — dynamic colors from wallpaper.
+# Port of binnewbs' matugen/config.toml (swww + templates) for sway.
+# Install with the snippet in ~/sway-binnewbs-snippet.nix, then press
+# $mod+w (sway-wallpaper) to pick a wallpaper and recolour everything.
+
+[config.wallpaper]
+command = "awww"
+arguments = ["img", "--transition-type", "any", "--transition-fps", "60"]
+set = true
+
+[templates.waybar]
+input_path = '~/.config/matugen/templates/colors.css'
+output_path = '~/.config/waybar/colors.css'
+post_hook = 'pkill -SIGUSR2 waybar || true'
+
+[templates.sway]
+input_path = '~/.config/matugen/templates/sway-colors'
+output_path = '~/.config/sway/colors'
+post_hook = 'swaymsg reload || true'
+
+[templates.foot]
+input_path = '~/.config/matugen/templates/foot-colors.ini'
+output_path = '~/.config/foot/colors.ini'
+
+[templates.fuzzel]
+input_path = '~/.config/matugen/templates/fuzzel-colors.ini'
+output_path = '~/.config/fuzzel/colors.ini'
+
+[templates.gtk3]
+input_path = '~/.config/matugen/templates/gtk-colors.css'
+output_path = '~/.config/gtk-3.0/colors.css'
+
+[templates.gtk4]
+input_path = '~/.config/matugen/templates/gtk-colors.css'
+output_path = '~/.config/gtk-4.0/colors.css'

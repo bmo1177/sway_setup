@@ -1,0 +1,6 @@
+/*
+* GTK colors — generated with Matugen from the current wallpaper.
+*/
+<* for name, value in colors *>
+@define-color {{name}} {{value.default.hex}};
+<* endfor *>

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# sway-power — logout menu. Port of binnewbs' Wlogout.sh for sway.
+# Uses wlogout when installed, otherwise a swaynag fallback.
+# Bound to $mod+Shift+e in ~/.config/sway/config.
+set -euo pipefail
+
+if command -v wlogout >/dev/null 2>&1; then
+    exec wlogout
+fi
+
+exec swaynag -t warning -m 'Power menu' \
+    -b 'Lock' "$HOME/.config/sway/scripts/sway-lock" \
+    -b 'Logout' 'swaymsg exit' \
+    -b 'Suspend' 'systemctl suspend' \
+    -b 'Reboot' 'systemctl reboot' \
+    -b 'Shutdown' 'systemctl poweroff'

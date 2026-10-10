@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# sway-night — night-light toggle. Bound to $mod+Ctrl+t.
+# Needs gammastep (see ~/sway-binnewbs-snippet.nix). SIGUSR1 flips
+# gammastep between active and bypassed without restarting it.
+set -euo pipefail
+
+if pgrep -f '^gammastep( |$)' >/dev/null 2>&1; then
+    pkill -SIGUSR1 -f '^gammastep( |$)' && notify-send 'Night light toggled'
+elif command -v gammastep >/dev/null 2>&1; then
+    swaymsg exec gammastep >/dev/null 2>&1 || true
+    notify-send 'Night light on (4000K after sunset)'
+else
+    notify-send 'Night light' 'Install gammastep first — see ~/sway-binnewbs-snippet.nix'
+fi

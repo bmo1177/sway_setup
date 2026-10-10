@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# sway-brightness — screen backlight with notifications.
+# Port of binnewbs' brightness.sh (JaKooLit). Step 10, floor 5%.
+set -euo pipefail
+
+STEP=10
+
+get_backlight() {
+    brightnessctl -m | cut -d, -f4 | tr -d '%'
+}
+
+notify_user() {
+    local current="$1"
+    notify-send -h string:x-canonical-private-synchronous:brightness_notif \
+        -h "int:value:$current" -u low "Screen" "Brightness:$current%"
+}
+
+change_backlight() {
+    local current new_brightness
+    current="$(get_backlight)"
+    if [ "$1" = "+${STEP}%" ]; then
+        new_brightness=$((current + STEP))
+    else
+        new_brightness=$((current - STEP))
+    fi
+    if [ "$new_brightness" -lt 5 ]; then new_brightness=5; fi
+    if [ "$new_brightness" -gt 100 ]; then new_brightness=100; fi
+    brightnessctl set "${new_brightness}%"
+    notify_user "$new_brightness"
+}
+
+case "${1:-}" in
+    --get) get_backlight ;;
+    --inc) change_backlight "+${STEP}%" ;;
+    --dec) change_backlight "${STEP}%-" ;;
+    *) get_backlight ;;
+esac

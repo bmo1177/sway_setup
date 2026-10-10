@@ -1,0 +1,155 @@
+/* Islands style — port of binnewbs "bintang default.css" (JaKooLit) for sway.
+ * Transparent bar, grouped pills, matugen colors via colors.css.
+ * Switch with: $mod+Ctrl+b (waybar-style script). */
+@import "colors.css";
+
+* {
+	font-family: "JetBrainsMono Nerd Font";
+	font-weight: bold;
+	min-height: 0;
+	font-size: 100%;
+	font-feature-settings: '"zero", "ss01", "ss02", "ss03", "ss04", "ss05", "cv31"';
+}
+
+window#waybar,
+window#waybar.empty,
+window#waybar.empty #window {
+	background-color: transparent;
+	padding: 0px;
+	border: 0px;
+}
+
+tooltip {
+	color: @inverse_surface;
+	background: rgba(0, 0, 0, 0.8);
+	border-radius: 20px;
+}
+
+tooltip label {
+	color: @inverse_surface;
+}
+
+/* --- module groups: floating islands --- */
+.modules-right,
+.modules-center,
+.modules-left {
+	background-color: rgba(0, 0, 0, 0.5);
+	color: @secondary;
+	border-bottom: 0px;
+	border-style: solid;
+	border-color: white;
+	border-radius: 20px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-right: 6px;
+	padding-left: 6px;
+}
+
+/* --- workspaces: kanji, active pill expands --- */
+#workspaces button {
+	color: @outline;
+	box-shadow: none;
+	text-shadow: none;
+	padding: 0px;
+	border-radius: 9px;
+	padding-left: 4px;
+	padding-right: 4px;
+	animation: gradient_f 20s ease-in infinite;
+	transition: all 0.5s cubic-bezier(.55, -0.68, .48, 1.682);
+}
+
+#workspaces button:hover {
+	color: @on_secondary_fixed_variant;
+	border-radius: 20px;
+	padding-left: 2px;
+	padding-right: 2px;
+	animation: gradient_f 20s ease-in infinite;
+	transition: all 0.3s cubic-bezier(.55, -0.68, .48, 1.682);
+}
+
+#workspaces button.focused {
+	color: @on_primary;
+	background: @primary;
+	padding-left: 10px;
+	padding-right: 10px;
+	animation: gradient_f 20s ease-in infinite;
+	transition: all 0.3s cubic-bezier(.55, -0.68, .48, 1.682);
+}
+
+#workspaces button.urgent {
+	color: @on_primary;
+	background: @error;
+	border-radius: 10px;
+}
+
+#mode {
+	color: @on_primary;
+	background: @primary;
+	padding: 0 12px;
+	margin: 4px 3px;
+	border-radius: 8px;
+}
+
+#window {
+	color: @on_surface_variant;
+}
+
+/* --- individual modules --- */
+#backlight,
+#battery,
+#bluetooth,
+#clock,
+#cpu,
+#memory,
+#network,
+#pulseaudio,
+#temperature,
+#tray,
+#custom-power,
+#custom-swaync,
+#custom-launcher-term,
+#custom-launcher-browser,
+#custom-launcher-files,
+#custom-launcher-code,
+#custom-launcher-obsidian,
+#custom-launcher-warp {
+	background-color: transparent;
+	color: @secondary;
+	padding: 1px 12px;
+	margin: 2px 1px;
+}
+
+#custom-launcher-term:hover,
+#custom-launcher-browser:hover,
+#custom-launcher-files:hover,
+#custom-launcher-code:hover,
+#custom-launcher-obsidian:hover,
+#custom-launcher-warp:hover {
+	color: @primary;
+}
+
+#clock {
+	color: @primary;
+	font-weight: bold;
+}
+
+#battery.charging {
+	color: @tertiary;
+}
+
+#battery.critical:not(.charging) {
+	color: @error;
+}
+
+#network.disconnected {
+	color: @error;
+}
+
+#pulseaudio.muted {
+	color: @outline;
+}
+
+#custom-power {
+	color: @error;
+	font-size: 110%;
+}

@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+# sway-volume — volume controls with notifications.
+# Port of binnewbs' volume.sh (JaKooLit) for sway. Used by waybar
+# scroll/click actions and XF86Audio* keybinds.
+set -euo pipefail
+
+get_volume() {
+    local volume
+    volume="$(pamixer --get-volume)"
+    if [ "$volume" -eq 0 ] || [ "$(pamixer --get-mute)" = "true" ]; then
+        echo "Muted"
+    else
+        echo "$volume %"
+    fi
+}
+
+notify_user() {
+    if [ "$(get_volume)" = "Muted" ]; then
+        notify-send -h string:x-canonical-private-synchronous:volume_notif -u low " Volume:" " Muted"
+    else
+        notify-send -h string:x-canonical-private-synchronous:volume_notif \
+            -h "int:value:$(pamixer --get-volume)" -u low " Volume Level:" " $(get_volume)"
+    fi
+}
+
+inc_volume() {
+    if [ "$(pamixer --get-mute)" = "true" ]; then
+        pamixer -u && notify_user
+    else
+        pamixer -i 5 --allow-boost --set-limit 150 && notify_user
+    fi
+}
+
+dec_volume() {
+    if [ "$(pamixer --get-mute)" = "true" ]; then
+        pamixer -u && notify_user
+    else
+        pamixer -d 5 && notify_user
+    fi
+}
+
+toggle_mute() {
+    if [ "$(pamixer --get-mute)" = "false" ]; then
+        pamixer -m && notify-send -u low " Mute"
+    else
+        pamixer -u && notify-send -u low " Volume:" " Switched ON"
+    fi
+}
+
+toggle_mic() {
+    if [ "$(pamixer --default-source --get-mute)" = "false" ]; then
+        pamixer --default-source -m && notify-send -u low " Microphone:" " Switched OFF"
+    else
+        pamixer --default-source -u && notify-send -u low " Microphone:" " Switched ON"
+    fi
+}
+
+mic_volume() {
+    if [ "$(pamixer --default-source --get-mute)" = "true" ]; then
+        toggle_mic
+    else
+        case "$1" in
+            --mic-inc) pamixer --default-source -i 5 ;;
+            --mic-dec) pamixer --default-source -d 5 ;;
+        esac
+        notify-send -h string:x-canonical-private-synchronous:volume_notif \
+            -h "int:value:$(pamixer --default-source --get-volume)" -u low \
+            " Mic Level:" " $(pamixer --default-source --get-volume) %"
+    fi
+}
+
+case "${1:-}" in
+    --inc) inc_volume ;;
+    --dec) dec_volume ;;
+    --toggle) toggle_mute ;;
+    --toggle-mic) toggle_mic ;;
+    --mic-inc|--mic-dec) mic_volume "$1" ;;
+    *) get_volume ;;
+esac

@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# waybar-layout — switch waybar layouts.
+# Port of binnewbs' WaybarLayout.sh (rofi) for fuzzel. Bound to $mod+Alt+b.
+set -euo pipefail
+
+LAYOUTS_DIR="$HOME/.config/waybar/configs"
+ACTIVE_CONFIG="$HOME/.config/waybar/config"
+
+choice="$( { find -L "$LAYOUTS_DIR" -maxdepth 1 -type f -exec basename {} \; | sort; echo 'no panel'; } \
+    | fuzzel --dmenu --prompt 'Waybar layout: ')" || exit 0
+[ -z "${choice:-}" ] && exit 0
+
+if [ "$choice" = 'no panel' ]; then
+    pkill -f '^waybar( |$)' || true
+    notify-send 'Waybar' 'hidden (run waybar to restore)'
+    exit 0
+fi
+
+ln -sfn "$LAYOUTS_DIR/$choice" "$ACTIVE_CONFIG"
+"$HOME/.config/sway/scripts/waybar-restart" &
+notify-send 'Waybar layout' "$choice"

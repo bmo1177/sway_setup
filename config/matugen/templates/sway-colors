@@ -1,0 +1,10 @@
+# Sway colors — generated with Matugen from the current wallpaper.
+# Do not edit: run $mod+w (sway-wallpaper) instead.
+<* for name, value in colors *>
+set ${{name}} {{value.default.hex}}
+<* endfor *>
+
+client.focused $outline $outline $on_primary $outline $outline
+client.focused_inactive $outline_variant $surface $on_surface $outline_variant $outline_variant
+client.unfocused $outline_variant $surface $on_surface $outline_variant $outline_variant
+client.urgent $error $error $on_primary $error $error

@@ -1,0 +1,251 @@
+# Sway config — Catppuccin Mocha base + binnewbs/arch-hyprland ports.
+# Ideas taken from binnewbs (JaKooLit-derived): matugen-ready colors,
+# current_wallpaper symlink, islands waybar, wppicker/style/layout scripts,
+# wlogout power menu, grouped modules, kanji workspaces.
+# SwayFX equivalents used where Hyprland-only features don't exist
+# (no animations; blur/shadow/corners via swayfx).
+
+set $mod Mod4
+set $term foot
+set $menu fuzzel --show drun
+set $fm nautilus
+set $browser xdg-open "https://"
+set $scripts /home/devlab/.config/sway/scripts
+
+# Matugen overwrites this (see ~/.config/matugen/config.toml [templates.sway]).
+include /home/devlab/.config/sway/colors
+
+# --- outputs: 14" LG 1920x1080. Wallpaper is set live by awww
+# --- (see exec below + sway-wallpaper script), so no `bg` here — otherwise
+# --- sway spawns its own swaybg child that fights the awww daemon.
+output eDP-1 scale 1.25
+
+font pango:JetBrainsMono Nerd Font 12
+
+# --- keyboard: US + Arabic (Alt+Shift or Win+Space to switch) ---
+input * {
+    xkb_layout "us,ara"
+    xkb_options "grp:alt_shift_toggle,grp:win_space_toggle"
+}
+
+# --- touchpad like GNOME: tap-to-click, tap-drag, natural two-finger
+# --- scroll, no accidental clicks while typing. 1/2/3-finger tap =
+# --- left/right/middle (so middle-click paste works from the pad too).
+input type:touchpad {
+    tap enabled
+    drag enabled
+    dwt enabled
+    natural_scroll enabled
+    scroll_method two_finger
+    tap_button_map lrm
+}
+
+# --- GNOME-style click-to-focus (sway defaults to focus-follows-mouse) ---
+focus_follows_mouse no
+
+floating_modifier $mod
+tiling_drag $mod
+
+# --- larger, easier-to-track cursor on the 14" panel ---
+seat seat0 xcursor_theme Adwaita 28
+
+# --- essentials ---
+bindsym $mod+Return exec $term
+bindsym $mod+Shift+Return exec $term -a float-term
+for_window [app_id="float-term"] floating enable, resize set 800 550, move position center
+bindsym $mod+d exec $menu
+# macOS-style switching: Alt+Tab = window picker, Super+Tab = workspace/window picker.
+# Absolute paths: sway's exec PATH doesn't include ~/.nix-profile/bin.
+# The `pgrep || start` guard heals a dead swayrd (socket file lingers with
+# nobody listening, which otherwise fails with "Connection refused").
+bindsym Mod1+Tab exec sh -c 'pgrep -x swayrd >/dev/null || { /home/devlab/.nix-profile/bin/swayrd & sleep 1; }; exec /home/devlab/.nix-profile/bin/swayr switch-window'
+bindsym $mod+Tab exec sh -c 'pgrep -x swayrd >/dev/null || { /home/devlab/.nix-profile/bin/swayrd & sleep 1; }; exec /home/devlab/.nix-profile/bin/swayr switch-workspace-or-window'
+bindsym $mod+e exec $fm
+bindsym $mod+b exec $browser
+bindsym $mod+c exec code
+bindsym $mod+n exec obsidian
+bindsym $mod+q kill
+bindsym $mod+Shift+q kill
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+e exec wlogout  # was sway-power script; still in $scripts as fallback
+bindsym $mod+Ctrl+l exec $scripts/sway-lock
+
+# --- binnewbs ports: wallpaper picker, waybar style/layout, hide bar ---
+bindsym $mod+w exec $scripts/sway-wallpaper
+bindsym $mod+Ctrl+b exec $scripts/waybar-style
+bindsym $mod+Alt+b exec $scripts/waybar-layout
+# NOTE: binnewbs uses $mod+h to hide waybar and $mod+l to lock, but those
+# keys are taken here by vim-style focus (h/j/k/l). Adapted equivalents:
+bindsym $mod+Ctrl+h exec pkill -SIGUSR1 -f '^waybar( |$)'
+bindsym $mod+r exec $scripts/waybar-restart
+
+# --- focus / move ---
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# --- resize (binnewbs binde resizeactive equivalent) ---
+bindsym $mod+Ctrl+Left resize shrink width 50 px
+bindsym $mod+Ctrl+Right resize grow width 50 px
+bindsym $mod+Ctrl+Up resize shrink height 50 px
+bindsym $mod+Ctrl+Down resize grow height 50 px
+
+# --- layout ---
+bindsym $mod+s layout stacking
+bindsym $mod+t layout tabbed
+bindsym $mod+v splitv
+bindsym $mod+Shift+v splith
+bindsym $mod+f fullscreen toggle
+# Total focus: fullscreen + hide bar (wallpaper gone too). Run again to restore.
+bindsym $mod+Shift+f exec $scripts/sway-focusmode
+bindsym $mod+space floating toggle
+bindsym $mod+Shift+space focus mode_toggle
+bindsym $mod+p split toggle
+
+# --- workspaces 1-10 (binnewbs has 10; was 1-5) ---
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+bindsym $mod+3 workspace number 3
+bindsym $mod+4 workspace number 4
+bindsym $mod+5 workspace number 5
+bindsym $mod+6 workspace number 6
+bindsym $mod+7 workspace number 7
+bindsym $mod+8 workspace number 8
+bindsym $mod+9 workspace number 9
+bindsym $mod+0 workspace number 10
+bindsym $mod+F11 workspace number 11
+bindsym $mod+F12 workspace number 12
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5
+bindsym $mod+Shift+6 move container to workspace number 6
+bindsym $mod+Shift+7 move container to workspace number 7
+bindsym $mod+Shift+8 move container to workspace number 8
+bindsym $mod+Shift+9 move container to workspace number 9
+bindsym $mod+Shift+0 move container to workspace number 10
+bindsym $mod+Shift+F11 move container to workspace number 11
+bindsym $mod+Shift+F12 move container to workspace number 12
+bindsym $mod+button5 workspace next
+bindsym $mod+button4 workspace prev
+# Pressing the current workspace number jumps back to the previous one.
+workspace_auto_back_and_forth yes
+
+# --- scratchpad: stash a window, summon it on any workspace ---
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+minus scratchpad show
+
+# --- cheatsheet: this whole shortcut list in a popup ---
+bindsym $mod+slash exec $scripts/sway-cheatsheet
+# --- night light (blue-light filter; needs gammastep, see snippet) ---
+bindsym $mod+Ctrl+t exec $scripts/sway-night
+
+# --- look: binnewbs gaps/rounding/blur (gaps_in 5, gaps_out 10, round 10,
+# --- blur size 5 passes 3). Colors live in ~/.config/sway/colors. ---
+gaps inner 5
+gaps outer 10
+corner_radius 10
+default_border pixel 2
+
+# Render cost tuned for laptop battery: 2 blur passes and a tighter shadow
+# look identical on a 14" panel but wake the GPU far less than 3/20.
+blur enable
+blur_xray no
+blur_passes 2
+blur_radius 5
+shadows enable
+shadow_blur_radius 12
+shadow_color #11111bcc
+for_window [all] dim_inactive 0.15
+
+# --- window rules (binnewbs windowrules.conf float/dialog bits) ---
+for_window [app_id="pavucontrol"] floating enable, resize set 50ppt 60ppt, move position center
+for_window [app_id="org.pulseaudio.pavucontrol"] floating enable, resize set 50ppt 60ppt, move position center
+for_window [window_role="pop-up"] floating enable
+for_window [window_type="dialog"] floating enable, move position center
+for_window [title="Save As"] floating enable, resize set 50ppt 60ppt, move position center
+for_window [title="Save a File"] floating enable, resize set 50ppt 60ppt, move position center
+for_window [title="Open Files"] floating enable, resize set 70ppt 60ppt, move position center
+for_window [title="Pick Files"] floating enable, resize set 50ppt 60ppt, move position center
+# Fullscreen video players hold idle-inhibit automatically (no lock mid-movie).
+for_window [all] inhibit_idle fullscreen
+
+# --- session env for user services (fixes portals, notifications) ---
+exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK
+exec hash dbus-update-activation-environment 2>/dev/null && dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK
+
+# --- bar + notifications, standalone like binnewbs (exec-once = waybar).
+# Waybar is NOT sway-managed on purpose: sway would spawn its own copy on
+# every reload next to the one the style/layout scripts start (= double
+# bars). Restart it with $mod+r (waybar-restart script) instead.
+exec waybar
+exec swaync -s /home/devlab/.config/swaync/style.css
+exec kanshi
+# swayr daemon (Alt+Tab window switcher needs it; the CLI talks to this socket).
+exec swayrd
+# Wallpaper daemon (awww, renamed swww): picker script sets wallpaper live
+# through it; --apply restores current_wallpaper at login once daemon is up.
+exec awww-daemon
+exec $scripts/sway-wallpaper --apply
+# Night light once installed (no-op until `sudo nixos-rebuild switch`).
+exec command -v gammastep >/dev/null && gammastep
+
+# --- idle / lock: dim at 4 min, lock at 5, screens off at 10, lock on suspend.
+# brightnessctl -s saves the level, resume (-r) restores it on activity.
+set $lock $scripts/sway-lock
+exec swayidle -w \
+    timeout 240 'brightnessctl -s; brightnessctl set 15%' \
+    resume 'brightnessctl -r' \
+    timeout 300 '$lock' \
+    timeout 600 'swaymsg "output * power off"' \
+    resume 'swaymsg "output * power on"' \
+    before-sleep '$lock'
+
+# --- screen off/on toggle (press again to wake — blind-safe, no auto-wake exists).
+bindsym $mod+Shift+x exec swaymsg "output * power toggle"
+
+# --- screenshots: Print = region-to-file, Mod+Print = full-to-file, Mod+Shift+S = annotate in swappy ---
+bindsym Print exec grim -g "$(slurp)" ~/Pictures/Screenshots/$(date +%Y-%m-%d-%H%M%S).png && notify-send 'Screenshot saved'
+bindsym $mod+Print exec grim ~/Pictures/Screenshots/$(date +%Y-%m-%d-%H%M%S).png && notify-send 'Screenshot saved'
+bindsym $mod+Shift+s exec grim -g "$(slurp)" - | swappy -f -
+
+# --- clipboard history ($mod+Ctrl+v frees $mod+v for splitv below) ---
+exec wl-paste --type text --watch cliphist store
+exec wl-paste --type image --watch cliphist store
+bindsym $mod+Ctrl+v exec cliphist list | fuzzel --dmenu | cliphist decode | wl-copy
+
+# --- media / brightness (binnewbs-style notify scripts) ---
+bindsym XF86AudioRaiseVolume exec $scripts/sway-volume --inc
+bindsym XF86AudioLowerVolume exec $scripts/sway-volume --dec
+bindsym XF86AudioMute exec $scripts/sway-volume --toggle
+bindsym XF86AudioMicMute exec $scripts/sway-volume --toggle-mic
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+bindsym XF86MonBrightnessUp exec $scripts/sway-brightness --inc
+bindsym XF86MonBrightnessDown exec $scripts/sway-brightness --dec
+
+# --- ML workflow: browsers/docs to workspace 4, idle-inhibit toggle ---
+assign [app_id="firefox"] 4
+assign [app_id="google-chrome"] 4
+assign [app_id="brave-browser"] 4
+bindsym $mod+o exec /home/devlab/.local/bin/sway-inhibit-toggle
+# Keystroke overlay for tutorials/recordings (toggle). Bottom-corner display.
+bindsym $mod+i exec sh -c 'pgrep -x wshowkeys >/dev/null && pkill -x wshowkeys || exec /home/devlab/.nix-profile/bin/wshowkeys -a bottom'
+
+# Polkit agent for admin GUI prompts (store path resolved 2026-09-17).
+exec /nix/store/f7qi5nxir0v0grgz6i853g2whsi9437f-polkit-gnome-0.105/libexec/polkit-gnome-authentication-agent-1

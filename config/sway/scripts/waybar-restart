@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# waybar-restart — restart waybar (+ swaync if present).
+# Port of binnewbs' wbrestart.sh. Bound to $mod+r.
+# Waybar runs standalone (plain `exec waybar` in sway config, NOT
+# swaybar_command), so kill + swaymsg-exec can never stack duplicate bars:
+# sway reload does not re-run `exec` lines.
+set -euo pipefail
+
+# NOTE: match by full cmdline (-f '^name( |$)'), not -x: the Nix wrapper
+# runs as .waybar-wrapped / .swaync-wrapped, so `pkill -x waybar` never
+# matches and every restart would stack another bar.
+if command -v swaync >/dev/null 2>&1; then
+    pkill -f '^swaync( |$)' || true
+    swaymsg exec swaync >/dev/null 2>&1 || true
+fi
+pkill -f '^waybar( |$)' || true
+# The swaync drawer module spawns a persistent swaync-client subscriber per
+# bar start; it survives the kill above and stacks up (use [s] so this script
+# can never match its own command line the way plain -f patterns can).
+pkill -f '[s]waync-client' || true
+sleep 0.5
+swaymsg exec waybar >/dev/null 2>&1 || true

@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# sway-cheatsheet — every sway shortcut in a fuzzel popup.
+# Bound to $mod+slash in ~/.config/sway/config. Picking a line does
+# nothing (display only). Keep in sync with ~/.config/sway/config.
+set -euo pipefail
+
+fuzzel --dmenu --prompt 'Keys: ' --lines 18 <<'EOF' >/dev/null || exit 0
+Super+Return — Terminal
+Super+Shift+Return — Floating terminal
+Super+D — App launcher
+Super+E — Files
+Super+B — Browser
+Super+C — VS Code
+Super+N — Obsidian
+Super+Q / Super+Shift+Q — Close window
+Super+Shift+C — Reload sway config
+Super+Shift+E — Power menu
+Super+Ctrl+L — Lock screen
+Super+Shift+X — Screen off/on toggle (press again to wake)
+Super+W — Wallpaper picker + theme
+Super+Ctrl+B — Waybar style menu
+Super+Alt+B — Waybar layout menu
+Super+Ctrl+H — Hide/show bar
+Super+R — Restart bar
+Super+/ — This cheatsheet
+Super+Ctrl+T — Night light toggle
+Super+Arrows / Super+HJKL — Focus window
+Super+Shift+Arrows / Super+Shift+HJKL — Move window
+Super+Ctrl+Arrows — Resize window
+Super+S — Stacking layout
+Super+T — Tabbed layout
+Super+V / Super+Shift+V — Split vertical / horizontal
+Super+P — Toggle split orientation
+Super+F — Fullscreen
+Super+Shift+F — Focus mode (fullscreen + hide bar)
+Super+Space — Float window
+Super+Shift+Space — Focus tiling/floating
+Super+1..9,0 — Workspace 1..10, Super+F11/F12 — 11/12
+Super+Shift+1..9,0 — Move window to workspace (Shift+F11/F12 for 11/12)
+Alt+Tab — Window switcher (macOS Cmd+Tab)
+Super+Tab — Workspace/window switcher
+Super+I — Keystroke overlay toggle (for recordings)
+Super+Wheel — Next / previous workspace
+Super+Minus — Scratchpad window
+Super+Shift+Minus — Send window to scratchpad
+Print — Region screenshot
+Super+Print — Full screenshot
+Super+Shift+S — Region screenshot
+Super+Ctrl+V — Clipboard history
+Super+O — Idle-inhibit toggle (training-safe)
+Volume / mic / brightness keys — Notify + adjust
+EOF

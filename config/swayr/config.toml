@@ -1,0 +1,28 @@
+# swayr — MRU window switcher (macOS Cmd+Tab equivalent).
+# Bound to Alt+Tab in ~/.config/sway/config. Menu is fuzzel (plain text;
+# no markup — fuzzel would show wofi/HTML tags literally).
+# Selection lines MUST end with ({id}) — swayr parses the id back from them.
+
+[menu]
+executable = '/run/current-system/sw/bin/fuzzel'
+args = [
+    '--dmenu',
+    '--prompt=Window: ',
+    '--width=100',
+    '--lines=15',
+]
+
+[format]
+output_format = 'Output {name} ({id})'
+workspace_format = 'Workspace {name} [{layout}] ({id})'
+container_format = 'Container [{layout}] on {workspace_name} ({id})'
+window_format = '{app_name} — "{title}" on {workspace_name} ({id})'
+indent = '    '
+urgency_start = ''
+urgency_end = ''
+html_escape = false
+
+# Auto-tiling (drew-guide autotiling equivalent). OFF by default — flip to
+# true if you want new windows to alternate splits automatically.
+[layout]
+auto_tile = false

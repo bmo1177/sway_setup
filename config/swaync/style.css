@@ -1,0 +1,50 @@
+/* SwayNC style — islands look matching waybar, matugen colors.
+ * Port of the binnewbs/jakoolit swaync theme idea: control center and
+ * notifications reuse waybar's matugen-generated colors.css. */
+@import "/home/devlab/.config/waybar/colors.css";
+
+* {
+	font-family: "JetBrainsMono Nerd Font";
+	font-weight: bold;
+}
+
+.control-center {
+	background: rgba(0, 0, 0, 0.5);
+	border-radius: 20px;
+	border: 1px solid @outline_variant;
+	padding: 12px;
+}
+
+.notification {
+	background: @surface;
+	color: @on_surface;
+	border: 1px solid @outline_variant;
+	border-radius: 12px;
+	padding: 8px;
+}
+
+.notification.critical {
+	border-color: @error;
+}
+
+.widget-title {
+	color: @primary;
+	font-size: 1.1em;
+}
+
+.widget-dnd {
+	color: @secondary;
+}
+
+.widget-mpris {
+	background: @surface;
+	color: @on_surface;
+	border-radius: 12px;
+}
+
+.widget-volume,
+.widget-backlight {
+	background: @surface;
+	border-radius: 12px;
+	color: @secondary;
+}

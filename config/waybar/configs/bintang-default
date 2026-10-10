@@ -1,0 +1,312 @@
+{
+  "layer": "top",
+  "exclusive": true,
+  "passthrough": false,
+  "position": "top",
+  "spacing": 3,
+  "fixed-center": true,
+  "ipc": true,
+  "margin-top": 3,
+  "margin-left": 8,
+  "margin-right": 8,
+  "modules-left": [
+    "custom/launcher-term",
+    "custom/launcher-browser",
+    "custom/launcher-files",
+    "custom/launcher-code",
+    "custom/launcher-obsidian",
+    "custom/launcher-warp",
+    "clock",
+    "custom/separator#blank",
+    "tray",
+    "sway/mode"
+  ],
+  "modules-center": [
+    "sway/workspaces"
+  ],
+  "modules-right": [
+    "group/notify",
+    "battery",
+    "custom/separator#blank",
+    "group/audio",
+    "custom/separator#blank",
+    "custom/power"
+  ],
+  "sway/mode": {
+    "format": "{}"
+  },
+  "clock": {
+    "interval": 1,
+    "format": " {:%I:%M %p}",
+    "format-alt": " {:%H:%M   %Y, %d %B, %A}",
+    "tooltip-format": "<tt><small>{calendar}</small></tt>",
+    "calendar": {
+      "mode": "year",
+      "mode-mon-col": 3,
+      "weeks-pos": "right",
+      "on-scroll": 1,
+      "format": {
+        "months": "<span color='#ffead3'><b>{}</b></span>",
+        "days": "<span color='#ecc6d9'><b>{}</b></span>",
+        "weeks": "<span color='#99ffdd'><b>W{}</b></span>",
+        "weekdays": "<span color='#ffcc66'><b>{}</b></span>",
+        "today": "<span color='#ff6699'><b><u>{}</u></b></span>"
+      }
+    }
+  },
+  "tray": {
+    "icon-size": 20,
+    "spacing": 4
+  },
+  "battery": {
+    "align": 0,
+    "full-at": 100,
+    "design-capacity": false,
+    "states": {
+      "good": 95,
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{icon} {capacity}%",
+    "format-charging": " {capacity}%",
+    "format-plugged": "󱘖 {capacity}%",
+    "format-full": "{icon} Full",
+    "format-alt": "{icon} {time}",
+    "format-icons": [
+      "󰂎",
+      "󰁺",
+      "󰁻",
+      "󰁼",
+      "󰁽",
+      "󰁾",
+      "󰁿",
+      "󰂀",
+      "󰂁",
+      "󰂂",
+      "󰁹"
+    ],
+    "format-time": "{H}h {M}min",
+    "tooltip": true,
+    "on-click-right": "$HOME/.config/sway/scripts/sway-power"
+  },
+  "cpu": {
+    "format": "{usage}% 󰍛",
+    "interval": 2,
+    "min-length": 5,
+    "format-alt": "{icon0}{icon1}{icon2}{icon3} {usage:>2}% 󰍛",
+    "format-alt-click": "click",
+    "format-icons": [
+      "▁",
+      "▂",
+      "▃",
+      "▄",
+      "▅",
+      "▆",
+      "▇",
+      "█"
+    ]
+  },
+  "memory": {
+    "interval": 10,
+    "format": "{used:0.1f}G 󰾆",
+    "format-alt": "{percentage}% 󰾆",
+    "format-alt-click": "click",
+    "tooltip-format": "{used:0.1f}GB/{total:0.1f}G"
+  },
+  "temperature": {
+    "interval": 10,
+    "critical-threshold": 82,
+    "format": "{temperatureC}°C 󰈸",
+    "format-critical": "{temperatureC}°C 󰈸",
+    "hwmon-path": [
+      "/sys/class/hwmon/hwmon1/temp1_input",
+      "/sys/class/thermal/thermal_zone0/temp"
+    ]
+  },
+  "backlight": {
+    "interval": 5,
+    "format": "{icon}",
+    "format-icons": [
+      " ",
+      " ",
+      " ",
+      "󰃝 ",
+      "󰃞 ",
+      "󰃟 ",
+      "󰃠 "
+    ],
+    "tooltip-format": "backlight {percent}%",
+    "on-scroll-up": "$HOME/.config/sway/scripts/sway-brightness --inc",
+    "on-scroll-down": "$HOME/.config/sway/scripts/sway-brightness --dec"
+  },
+  "network": {
+    "format": "{ifname}",
+    "format-wifi": "{icon}",
+    "format-ethernet": "󰌘",
+    "format-disconnected": "󰌙",
+    "tooltip-format-wifi": "{essid} {icon} {signalStrength}%",
+    "tooltip-format-ethernet": "{ifname} 󰌘",
+    "tooltip-format-disconnected": "󰌙 Disconnected",
+    "max-length": 30,
+    "format-icons": [
+      "󰤯",
+      "󰤟",
+      "󰤢",
+      "󰤥",
+      "󰤨"
+    ]
+  },
+  "bluetooth": {
+    "format": " ",
+    "format-disabled": "󰂳",
+    "format-connected": "󰂱 {num_connections}",
+    "tooltip-format": " {device_alias}",
+    "on-click": "blueman-manager"
+  },
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-bluetooth": "{icon} 󰂰 {volume}%",
+    "format-muted": "󰖁",
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": [
+        "",
+        "",
+        "󰕾",
+        ""
+      ]
+    },
+    "scroll-step": 5,
+    "on-click": "$HOME/.config/sway/scripts/sway-volume --toggle",
+    "on-click-right": "pavucontrol -t 3",
+    "on-scroll-up": "$HOME/.config/sway/scripts/sway-volume --inc",
+    "on-scroll-down": "$HOME/.config/sway/scripts/sway-volume --dec",
+    "tooltip-format": "{icon} {desc} | {volume}%"
+  },
+  "pulseaudio#microphone": {
+    "format": "{format_source}",
+    "format-source": " {volume}%",
+    "format-source-muted": "",
+    "on-click": "$HOME/.config/sway/scripts/sway-volume --toggle-mic",
+    "on-click-right": "pavucontrol -t 4",
+    "on-scroll-up": "$HOME/.config/sway/scripts/sway-volume --mic-inc",
+    "on-scroll-down": "$HOME/.config/sway/scripts/sway-volume --mic-dec",
+    "scroll-step": 5
+  },
+  "custom/swaync": {
+    "tooltip": true,
+    "tooltip-format": "Left Click: Notification Center\nRight Click: Do not Disturb",
+    "format": "{} {icon} ",
+    "format-icons": {
+      "notification": "<span foreground='red'><sup></sup></span>",
+      "none": "",
+      "dnd-notification": "<span foreground='red'><sup></sup></span>",
+      "dnd-none": "",
+      "inhibited-notification": "<span foreground='red'><sup></sup></span>",
+      "inhibited-none": "",
+      "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
+      "dnd-inhibited-none": ""
+    },
+    "return-type": "json",
+    "interval": "once",
+    "exec-if": "command -v swaync-client",
+    "exec": "swaync-client -swb 2>/dev/null || echo '{\"text\": \"\", \"tooltip\": \"swaync not installed\", \"class\": \"none\"}'",
+    "on-click": "command -v swaync-client >/dev/null && sleep 0.1 && swaync-client -t -sw",
+    "on-click-right": "command -v swaync-client >/dev/null && swaync-client -d -sw",
+    "escape": true
+  },
+  "custom/power": {
+    "format": "⏻",
+    "on-click": "$HOME/.config/sway/scripts/sway-power",
+    "tooltip": true,
+    "tooltip-format": "Logout Menu"
+  },
+  "custom/separator#blank": {
+    "format": "",
+    "interval": "once",
+    "tooltip": false
+  },
+  "group/audio": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 500,
+      "children-class": "pulseaudio",
+      "transition-left-to-right": true
+    },
+    "modules": [
+      "pulseaudio",
+      "pulseaudio#microphone"
+    ]
+  },
+  "group/notify": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 500,
+      "children-class": "custom-swaync",
+      "transition-left-to-right": false
+    },
+    "modules": [
+      "custom/swaync"
+    ]
+  },
+  "sway/workspaces": {
+    "disable-scroll": true,
+    "all-outputs": true,
+    "format": "{icon}",
+    "format-icons": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "8": "8",
+      "9": "9",
+      "10": "10",
+      "11": "11",
+      "12": "12"
+    }
+  },
+  "custom/launcher-term": {
+    "format": "",
+    "on-click": "foot",
+    "tooltip": true,
+    "tooltip-format": "Terminal"
+  },
+  "custom/launcher-browser": {
+    "format": "",
+    "on-click": "xdg-open https://",
+    "tooltip": true,
+    "tooltip-format": "Browser"
+  },
+  "custom/launcher-files": {
+    "format": "",
+    "on-click": "nautilus",
+    "tooltip": true,
+    "tooltip-format": "Files"
+  },
+  "custom/launcher-code": {
+    "format": "",
+    "on-click": "code",
+    "tooltip": true,
+    "tooltip-format": "VS Code"
+  },
+  "custom/launcher-obsidian": {
+    "format": "",
+    "on-click": "obsidian",
+    "tooltip": true,
+    "tooltip-format": "Obsidian"
+  },
+  "custom/launcher-warp": {
+    "format": "",
+    "on-click": "warp-terminal",
+    "tooltip": true,
+    "tooltip-format": "Warp"
+  }
+}

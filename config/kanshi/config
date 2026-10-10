@@ -1,0 +1,16 @@
+# kanshi — display profiles. Reload after editing with:
+#   pkill kanshi; swaymsg exec kanshi
+
+# Laptop panel only (14" LG 1920x1080). Scale 1.25 must match the
+# `output eDP-1 scale 1.25` line in ~/.config/sway/config — kanshi
+# overrides sway's own output settings when it applies a profile.
+profile {
+    output eDP-1 enable scale 1.25
+}
+
+# Docked template: adjust the external output name/mode, then uncomment.
+# Find names with: swaymsg -t get_outputs
+# profile docked {
+#     output eDP-1 disable
+#     output DP-1 enable mode 1920x1080 scale 1.0
+# }

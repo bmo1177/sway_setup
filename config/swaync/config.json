@@ -1,0 +1,29 @@
+{
+  "$schema": "/etc/xdg/swaync/configSchema.json",
+  "positionX": "right",
+  "positionY": "top",
+  "control-center-margin-top": 8,
+  "control-center-margin-bottom": 8,
+  "control-center-margin-right": 8,
+  "control-center-margin-left": 8,
+  "notification-window-width": 400,
+  "control-center-width": 400,
+  "timeout": 5,
+  "timeout-low": 3,
+  "timeout-critical": 0,
+  "notification-visibility": {
+    "volume_notif": {"state": "enabled", "urgency": "Low", "app-name": "notify-send"},
+    "brightness_notif": {"state": "enabled", "urgency": "Low", "app-name": "notify-send"}
+  },
+  "widgets": ["title", "dnd", "notifications", "mpris", "volume", "backlight"],
+  "widget-config": {
+    "title": {"text": "Notifications", "clear-all-button": true, "button-text": "Clear All"},
+    "dnd": {"text": "Do Not Disturb"},
+    "mpris": {"image-size": 96, "image-radius": 8},
+    "volume": {"label": "󰕾"},
+    "backlight": {"label": "󰃟"}
+  },
+  "scripts": {
+    "volume_notif": {"exec": "", "run-on": "action"}
+  }
+}

@@ -1,0 +1,77 @@
+/* Full-bar style — opaque bar for presentations / bright rooms.
+ * Switch with: $mod+Ctrl+b (waybar-style script). */
+@import "colors.css";
+
+* {
+	font-family: "JetBrainsMono Nerd Font";
+	font-weight: bold;
+	min-height: 0;
+	font-size: 100%;
+}
+
+window#waybar {
+	background: @surface;
+	color: @on_surface;
+	border-bottom: 2px solid @outline_variant;
+}
+
+#workspaces button {
+	padding: 0 9px;
+	margin: 3px 2px;
+	color: @outline;
+	background: transparent;
+	border-radius: 7px;
+}
+
+#workspaces button:hover {
+	color: @on_surface;
+	background: @surface_container_high;
+}
+
+#workspaces button.focused {
+	color: @on_primary;
+	background: @primary;
+}
+
+#workspaces button.urgent {
+	color: @on_primary;
+	background: @error;
+}
+
+#mode {
+	color: @on_primary;
+	background: @tertiary;
+	padding: 0 12px;
+	margin: 4px 3px;
+	border-radius: 8px;
+}
+
+#window {
+	color: @on_surface_variant;
+}
+
+#clock,
+#battery,
+#network,
+#pulseaudio,
+#cpu,
+#memory,
+#tray,
+#custom-power,
+#custom-swaync {
+	padding: 0 10px;
+	color: @on_surface;
+}
+
+#clock {
+	color: @primary;
+	font-weight: bold;
+}
+
+#battery.charging {
+	color: @tertiary;
+}
+
+#battery.critical:not(.charging) {
+	color: @error;
+}
