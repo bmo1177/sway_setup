@@ -4,6 +4,25 @@ My daily-driver Sway setup: SwayFX + islands-style Waybar, wallpaper-driven
 theming (matugen), 12 workspaces, 50-wallpaper collection, Flatpak creative apps,
 and a full recording setup for tech content. Built on NixOS 26.05 alongside GNOME.
 
+## Screenshots
+
+![Desktop](screenshots/desktop.png)
+![App launcher](screenshots/launcher.png)
+![Window switcher](screenshots/switcher.png)
+![Power menu](screenshots/powermenu.png)
+
+## Quick reinstall
+
+```bash
+git clone https://github.com/bmo1177/sway_setup.git
+cd sway_setup
+./install.sh
+```
+
+The script backs up your current `~/.config` pieces (timestamped), installs
+everything from `config/`, and prints the remaining manual steps (NixOS
+packages + rebuild, user tools, Flatpaks, re-login).
+
 ## What's inside
 
 | Area | Details |
