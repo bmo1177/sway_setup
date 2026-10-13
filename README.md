@@ -34,12 +34,12 @@ Restore a backup: `cp -a ~/.config-backup-<timestamp>/<name> ~/.config/<name>`
 |---|---|
 | Compositor | SwayFX 0.5.3 (blur, shadows, rounded corners), 14" 1080p @ 1.25 scale via kanshi |
 | Theme | Catppuccin Mocha everywhere; `Super+W` picker recolors bar, terminal, launcher, GTK from the wallpaper |
-| Bar | Waybar islands: 6 quick launchers, numbered workspaces 1–12, notify drawer, audio, power |
-| Notifications | swaync (themed, canonical) · mako config kept as unused fallback · Power menu: wlogout (themed) |
+| Bar | Waybar islands: 6 quick launchers, numbered workspaces 1–12, layout flag (us/ara, click to switch), notify drawer, system drawer (cpu/mem/temp), network/bluetooth/backlight, audio drawer, idle-inhibit icon, power |
+| Notifications | swaync (themed, canonical, blurred layer) · mako config kept as unused fallback · Power menu: wlogout (themed) |
 | Launcher | fuzzel (drun, clipboard history, wallpaper picker, cheatsheet) |
-| Extras | Alt+Tab + Super+Tab window switchers (swayr), focus mode, keystroke overlay (wshowkeys), night light (gammastep), idle-inhibit toggle |
+| Extras | Alt+Tab + Super+Tab window switchers (swayr), focus mode, keystroke overlay (wshowkeys), night light (gammastep), lid-close lock, smart gaps |
 | Apps | OBS Studio, Kdenlive, FilmCraft, PhotoCraft, PdfCraft (Flatpaks), Obsidian, Warp, VS Code |
-| Recording | OBS (RNNoise mic filter built in), wf-recorder clips, swappy annotate |
+| Recording | OBS (RNNoise mic filter built in, wlr portal for Wayland capture), Super+Shift+R region clips, swappy annotate, color picker |
 
 ## Repo layout
 
@@ -110,6 +110,9 @@ workspace you are on, so links stay put.
 | Super+O | Idle-inhibit toggle (`~/.local/bin/sway-inhibit-toggle`) |
 | Super+Minus / Super+Shift+Minus | Scratchpad show / send to scratchpad |
 | Print / Super+Print / Super+Shift+S | Screenshots (region/file/annotate) |
+| Ctrl+Print | Region screenshot to clipboard |
+| Super+Shift+R | Region screen recording (toggle to stop, `~/Videos/screencasts/`) |
+| Super+Ctrl+C | Color picker (copies hex) |
 | Super+Ctrl+V | Clipboard history |
 
 ## Credits

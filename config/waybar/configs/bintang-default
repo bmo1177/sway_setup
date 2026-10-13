@@ -19,6 +19,7 @@
     "clock",
     "custom/separator#blank",
     "tray",
+    "sway/language",
     "sway/mode"
   ],
   "modules-center": [
@@ -27,6 +28,12 @@
   "modules-right": [
     "group/notify",
     "battery",
+    "idle_inhibitor",
+    "custom/separator#blank",
+    "group/system",
+    "network",
+    "bluetooth",
+    "backlight",
     "custom/separator#blank",
     "group/audio",
     "custom/separator#blank",
@@ -34,6 +41,20 @@
   ],
   "sway/mode": {
     "format": "{}"
+  },
+  "sway/language": {
+    "format": "{short}",
+    "tooltip-format": "Layout: {long} — click to switch (us/ara)",
+    "on-click": "swaymsg input type:keyboard xkb_switch_layout next"
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "",
+      "deactivated": ""
+    },
+    "tooltip-format-activated": "Idle inhibit ON — Super+O to turn off",
+    "tooltip-format-deactivated": "Idle inhibit OFF — Super+O for training runs"
   },
   "clock": {
     "interval": 1,
@@ -241,6 +262,19 @@
     "modules": [
       "pulseaudio",
       "pulseaudio#microphone"
+    ]
+  },
+  "group/system": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 500,
+      "children-class": "cpu",
+      "transition-left-to-right": true
+    },
+    "modules": [
+      "cpu",
+      "memory",
+      "temperature"
     ]
   },
   "group/notify": {

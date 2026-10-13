@@ -42,6 +42,7 @@ input type:touchpad {
 
 # --- GNOME-style click-to-focus (sway defaults to focus-follows-mouse) ---
 focus_follows_mouse no
+focus_wrapping yes
 
 floating_modifier $mod
 tiling_drag $mod
@@ -172,6 +173,18 @@ shadow_blur_radius 12
 shadow_color #11111bcc
 for_window [all] dim_inactive 0.15
 
+# Layer-shell eye candy (SwayFX): blur + shadow the bar and notification
+# layers so islands float over the wallpaper. Namespaces that never appear
+# are ignored. Bar namespace verified live via get_outputs.
+layer_effects "waybar" blur enable; shadows enable; corner_radius 12
+layer_effects "swaync-control-center" blur enable; shadows enable; corner_radius 16
+layer_effects "swaync-notification-window" shadows enable; corner_radius 12
+layer_effects "gtk-layer-shell" blur enable; shadows enable
+
+# Single window fills the workspace: no outer gaps, no edge borders.
+smart_gaps on
+hide_edge_borders smart
+
 # --- window rules (binnewbs windowrules.conf float/dialog bits) ---
 for_window [app_id="pavucontrol"] floating enable, resize set 50ppt 60ppt, move position center
 for_window [app_id="org.pulseaudio.pavucontrol"] floating enable, resize set 50ppt 60ppt, move position center
@@ -181,6 +194,8 @@ for_window [title="Save As"] floating enable, resize set 50ppt 60ppt, move posit
 for_window [title="Save a File"] floating enable, resize set 50ppt 60ppt, move position center
 for_window [title="Open Files"] floating enable, resize set 70ppt 60ppt, move position center
 for_window [title="Pick Files"] floating enable, resize set 50ppt 60ppt, move position center
+# Picture-in-Picture stays floating above tiling, on every workspace.
+for_window [title="Picture-in-Picture"] floating enable, sticky enable, resize set 480 270
 # Fullscreen video players hold idle-inhibit automatically (no lock mid-movie).
 for_window [all] inhibit_idle fullscreen
 
@@ -215,6 +230,10 @@ exec swayidle -w \
     resume 'swaymsg "output * power on"' \
     before-sleep '$lock'
 
+# Laptop lid: lock on close (logind suspends right after; before-sleep
+# covers the resume path). Re-enable the panel if logind left it off.
+bindswitch --reload --locked lid:on exec $scripts/sway-lock
+
 # --- screen off/on toggle (press again to wake — blind-safe, no auto-wake exists).
 bindsym $mod+Shift+x exec swaymsg "output * power toggle"
 
@@ -222,6 +241,13 @@ bindsym $mod+Shift+x exec swaymsg "output * power toggle"
 bindsym Print exec grim -g "$(slurp)" ~/Pictures/Screenshots/$(date +%Y-%m-%d-%H%M%S).png && notify-send 'Screenshot saved'
 bindsym $mod+Print exec grim ~/Pictures/Screenshots/$(date +%Y-%m-%d-%H%M%S).png && notify-send 'Screenshot saved'
 bindsym $mod+Shift+s exec grim -g "$(slurp)" - | swappy -f -
+# Ctrl+Print = region straight to clipboard (paste into chat/docs).
+bindsym Ctrl+Print exec grim -g "$(slurp)" - | wl-copy && notify-send 'Screenshot copied'
+
+# --- recording: Super+Shift+R toggles a region capture (wf-recorder) ---
+bindsym $mod+Shift+r exec $scripts/sway-record
+# --- color picker: Super+Ctrl+C copies the hex under the cursor ---
+bindsym $mod+Ctrl+c exec sh -c 'c=$(hyprpicker) || exit 0; printf %s "$c" | wl-copy; notify-send "Color $c copied"'
 
 # --- clipboard history ($mod+Ctrl+v frees $mod+v for splitv below) ---
 exec wl-paste --type text --watch cliphist store

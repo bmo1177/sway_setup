@@ -100,6 +100,8 @@ tooltip label {
 #bluetooth,
 #clock,
 #cpu,
+#idle_inhibitor,
+#language,
 #memory,
 #network,
 #pulseaudio,
@@ -152,4 +154,12 @@ tooltip label {
 #custom-power {
 	color: @error;
 	font-size: 110%;
+}
+
+#language {
+	color: @primary;
+}
+
+#idle_inhibitor.activated {
+	color: @tertiary;
 }

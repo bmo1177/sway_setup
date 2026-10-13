@@ -18,6 +18,13 @@
 {
   services.flatpak.enable = true;
 
+  # Screen sharing / OBS capture on Wayland needs the wlr portal.
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  };
+
   programs.sway = {
     enable = true;
     extraPackages = with pkgs; [
@@ -32,10 +39,11 @@
       kanshi
       # --- notifications / OSD deps ---
       libnotify
-      # --- screenshots / clipboard ---
+      # --- screenshots / clipboard / recording ---
       grim
       slurp
       swappy
+      wf-recorder
       wl-clipboard
       cliphist
       # --- volume / brightness / media ---

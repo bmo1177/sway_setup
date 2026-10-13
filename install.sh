@@ -83,7 +83,7 @@ if [ -d "$HOME/.config/waybar/styles" ]; then
 fi
 
 echo "==> Picture folders"
-mkdir -p "$HOME/Pictures/wallpapers" "$HOME/Pictures/Screenshots"
+mkdir -p "$HOME/Pictures/wallpapers" "$HOME/Pictures/Screenshots" "$HOME/Videos/screencasts"
 if [ -z "$(ls -A "$HOME/Pictures/wallpapers" 2>/dev/null)" ]; then
     echo "    (!!) drop images into ~/Pictures/wallpapers, then press Super+W to pick one"
 elif [ ! -e "$HOME/.config/sway/current_wallpaper" ]; then

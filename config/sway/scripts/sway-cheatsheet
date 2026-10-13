@@ -43,7 +43,10 @@ Super+I — Keystroke overlay toggle (for recordings)
 Super+Wheel — Next / previous workspace
 Super+Minus — Scratchpad window
 Super+Shift+Minus — Send window to scratchpad
-Print — Region screenshot
+Print — Region screenshot to file
+Ctrl+Print — Region screenshot to clipboard
+Super+Shift+R — Region screen recording (toggle to stop)
+Super+Ctrl+C — Color picker (copies hex)
 Super+Print — Full screenshot
 Super+Shift+S — Region screenshot
 Super+Ctrl+V — Clipboard history

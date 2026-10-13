@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# sway-record — region screen-recording toggle (wf-recorder + slurp).
+# Bound to $mod+Shift+r in ~/.config/sway/config. Press again to stop
+# (SIGINT finalizes the mp4). Files land in ~/Videos/screencasts/.
+set -euo pipefail
+
+OUTDIR="$HOME/Videos/screencasts"
+
+if pgrep -x wf-recorder >/dev/null 2>&1; then
+    pkill -INT -x wf-recorder
+    notify-send 'Recording stopped — finalizing mp4…'
+    exit 0
+fi
+
+mkdir -p "$OUTDIR"
+GEO="$(slurp)" || exit 0
+FILE="$OUTDIR/$(date +%Y-%m-%d-%H%M%S).mp4"
+notify-send 'Recording region…' "$FILE — Super+Shift+R to stop"
+exec wf-recorder -g "$GEO" -f "$FILE"

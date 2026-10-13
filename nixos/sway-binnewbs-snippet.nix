@@ -12,7 +12,8 @@
 #   pavucontrol              volume mixer (waybar right-click)
 #   blueman                  bluetooth manager (waybar click)
 #   yazi                     terminal file manager
-#   hyprpicker               color picker
+#   hyprpicker               color picker ($mod+Ctrl+c)
+#   wf-recorder              region screen recording ($mod+Shift+r)
 #   gammastep                night light / blue-light filter ($mod+Ctrl+t)
 #   celluloid                video player (mpv frontend, Wayland-native)
 #   file-roller              archive manager (zip/tar/7z in Files)
@@ -32,6 +33,7 @@
     blueman
     yazi
     hyprpicker
+    wf-recorder
     gammastep
     celluloid
     file-roller
