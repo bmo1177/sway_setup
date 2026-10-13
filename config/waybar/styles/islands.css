@@ -35,9 +35,7 @@ tooltip label {
 .modules-left {
 	background-color: rgba(0, 0, 0, 0.5);
 	color: @secondary;
-	border-bottom: 0px;
-	border-style: solid;
-	border-color: white;
+	border: none;
 	border-radius: 20px;
 	padding-top: 3px;
 	padding-bottom: 3px;
