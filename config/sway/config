@@ -239,10 +239,8 @@ bindsym XF86AudioPrev exec playerctl previous
 bindsym XF86MonBrightnessUp exec $scripts/sway-brightness --inc
 bindsym XF86MonBrightnessDown exec $scripts/sway-brightness --dec
 
-# --- ML workflow: Firefox/Brave open on workspace 4; Chrome opens wherever
-# --- you are (no assign) so links from any workspace stay put. ---
-assign [app_id="firefox"] 4
-assign [app_id="brave-browser"] 4
+# --- Browsers open wherever you are (no assigns) so links from any
+# --- workspace stay put. Idle-inhibit toggle for long runs. ---
 bindsym $mod+o exec ~/.local/bin/sway-inhibit-toggle
 # Keystroke overlay for tutorials/recordings (toggle). Bottom-corner display.
 bindsym $mod+i exec sh -c 'pgrep -x wshowkeys >/dev/null && pkill -x wshowkeys || exec $HOME/.nix-profile/bin/wshowkeys -a bottom'

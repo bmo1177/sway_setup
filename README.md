@@ -83,8 +83,8 @@ Wallpapers live in `~/Pictures/wallpapers/` (50 and counting, not vendored here)
 
 ### Window placement
 
-Firefox and Brave auto-open on workspace 4 (`assign` in `config/sway/config`).
-Chrome opens on whichever workspace you are on (no `assign`) so links stay put.
+No `assign` rules — Firefox, Brave, and Chrome all open on whichever
+workspace you are on, so links stay put.
 
 ## Troubleshooting
 
