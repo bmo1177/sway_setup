@@ -1,7 +1,7 @@
 /* SwayNC style — islands look matching waybar, matugen colors.
  * Port of the binnewbs/jakoolit swaync theme idea: control center and
  * notifications reuse waybar's matugen-generated colors.css. */
-@import "/home/devlab/.config/waybar/colors.css";
+@import "../waybar/colors.css";
 
 * {
 	font-family: "JetBrainsMono Nerd Font";

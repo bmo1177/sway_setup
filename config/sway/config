@@ -10,10 +10,10 @@ set $term foot
 set $menu fuzzel --show drun
 set $fm nautilus
 set $browser xdg-open "https://"
-set $scripts /home/devlab/.config/sway/scripts
+set $scripts ~/.config/sway/scripts
 
 # Matugen overwrites this (see ~/.config/matugen/config.toml [templates.sway]).
-include /home/devlab/.config/sway/colors
+include ~/.config/sway/colors
 
 # --- outputs: 14" LG 1920x1080. Wallpaper is set live by awww
 # --- (see exec below + sway-wallpaper script), so no `bg` here — otherwise
@@ -58,8 +58,8 @@ bindsym $mod+d exec $menu
 # Absolute paths: sway's exec PATH doesn't include ~/.nix-profile/bin.
 # The `pgrep || start` guard heals a dead swayrd (socket file lingers with
 # nobody listening, which otherwise fails with "Connection refused").
-bindsym Mod1+Tab exec sh -c 'pgrep -x swayrd >/dev/null || { /home/devlab/.nix-profile/bin/swayrd & sleep 1; }; exec /home/devlab/.nix-profile/bin/swayr switch-window'
-bindsym $mod+Tab exec sh -c 'pgrep -x swayrd >/dev/null || { /home/devlab/.nix-profile/bin/swayrd & sleep 1; }; exec /home/devlab/.nix-profile/bin/swayr switch-workspace-or-window'
+bindsym Mod1+Tab exec sh -c 'pgrep -x swayrd >/dev/null || { $HOME/.nix-profile/bin/swayrd & sleep 1; }; exec $HOME/.nix-profile/bin/swayr switch-window'
+bindsym $mod+Tab exec sh -c 'pgrep -x swayrd >/dev/null || { $HOME/.nix-profile/bin/swayrd & sleep 1; }; exec $HOME/.nix-profile/bin/swayr switch-workspace-or-window'
 bindsym $mod+e exec $fm
 bindsym $mod+b exec $browser
 bindsym $mod+c exec code
@@ -193,7 +193,7 @@ exec hash dbus-update-activation-environment 2>/dev/null && dbus-update-activati
 # every reload next to the one the style/layout scripts start (= double
 # bars). Restart it with $mod+r (waybar-restart script) instead.
 exec waybar
-exec swaync -s /home/devlab/.config/swaync/style.css
+exec swaync -s ~/.config/swaync/style.css
 exec kanshi
 # swayr daemon (Alt+Tab window switcher needs it; the CLI talks to this socket).
 exec swayrd
@@ -239,13 +239,15 @@ bindsym XF86AudioPrev exec playerctl previous
 bindsym XF86MonBrightnessUp exec $scripts/sway-brightness --inc
 bindsym XF86MonBrightnessDown exec $scripts/sway-brightness --dec
 
-# --- ML workflow: browsers/docs to workspace 4, idle-inhibit toggle ---
+# --- ML workflow: Firefox/Brave open on workspace 4; Chrome opens wherever
+# --- you are (no assign) so links from any workspace stay put. ---
 assign [app_id="firefox"] 4
-assign [app_id="google-chrome"] 4
 assign [app_id="brave-browser"] 4
-bindsym $mod+o exec /home/devlab/.local/bin/sway-inhibit-toggle
+bindsym $mod+o exec ~/.local/bin/sway-inhibit-toggle
 # Keystroke overlay for tutorials/recordings (toggle). Bottom-corner display.
-bindsym $mod+i exec sh -c 'pgrep -x wshowkeys >/dev/null && pkill -x wshowkeys || exec /home/devlab/.nix-profile/bin/wshowkeys -a bottom'
+bindsym $mod+i exec sh -c 'pgrep -x wshowkeys >/dev/null && pkill -x wshowkeys || exec $HOME/.nix-profile/bin/wshowkeys -a bottom'
 
-# Polkit agent for admin GUI prompts (store path resolved 2026-09-17).
-exec /nix/store/f7qi5nxir0v0grgz6i853g2whsi9437f-polkit-gnome-0.105/libexec/polkit-gnome-authentication-agent-1
+# Polkit agent for admin GUI prompts. Glob resolves the current
+# /nix/store hash at runtime (survives updates/GC); falls back to the
+# system profile path once polkit_gnome is in environment.systemPackages.
+exec sh -c 'for p in /nix/store/*-polkit-gnome-*/libexec/polkit-gnome-authentication-agent-1 /run/current-system/sw/libexec/polkit-gnome-authentication-agent-1; do test -x "$p" && exec "$p"; done'

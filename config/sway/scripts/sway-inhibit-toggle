@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Toggle Wayland idle inhibit (for long ML training runs).
+# Bound to $mod+o in the sway config. swayidle honours this via logind.
+set -euo pipefail
+
+PIDFILE="${XDG_RUNTIME_DIR:-/tmp}/sway-inhibit.pid"
+
+if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
+  kill "$(cat "$PIDFILE")"
+  rm -f "$PIDFILE"
+  notify-send 'Idle inhibit OFF'
+else
+  systemd-inhibit --what=idle --who=sway --why='user toggle ($mod+o)' sleep infinity &
+  echo $! > "$PIDFILE"
+  notify-send 'Idle inhibit ON — training safe from lock/suspend'
+fi

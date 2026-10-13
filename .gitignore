@@ -1,4 +1,10 @@
 *.bak
 *.bak-*
 *~
+*.swp
+*.swo
 .DS_Store
+# Local wallpaper symlink target — points at ~/Pictures/wallpapers, never commit.
+config/sway/current_wallpaper
+# Timestamped ~/.config backups live in $HOME, not the repo; ignore strays.
+.config-backup-*/

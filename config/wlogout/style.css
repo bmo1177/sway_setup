@@ -1,7 +1,7 @@
 /* Wlogout style — port of binnewbs' style.css for sway.
  * Reuses waybar's matugen-generated colors, so the power menu follows
  * the wallpaper theme. Icons are optional (text labels show without them). */
-@import "/home/devlab/.config/waybar/colors.css";
+@import "../waybar/colors.css";
 
 * {
 	background-image: none;
