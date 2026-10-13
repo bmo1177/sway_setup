@@ -182,7 +182,7 @@ for_window [all] dim_inactive 0.15
 # are ignored. Bar namespace verified live via get_outputs.
 layer_effects "waybar" blur disable; shadows disable
 layer_effects "swaync-control-center" blur enable; shadows enable; corner_radius 16
-layer_effects "swaync-notification-window" shadows enable; corner_radius 12
+layer_effects "swaync-notification-window" shadows disable
 layer_effects "gtk-layer-shell" blur enable; shadows enable
 
 # Single window fills the workspace: no outer gaps, no edge borders.
