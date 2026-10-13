@@ -176,7 +176,7 @@ for_window [all] dim_inactive 0.15
 # Layer-shell eye candy (SwayFX): blur + shadow the bar and notification
 # layers so islands float over the wallpaper. Namespaces that never appear
 # are ignored. Bar namespace verified live via get_outputs.
-layer_effects "waybar" blur enable; shadows enable; corner_radius 12
+layer_effects "waybar" blur disable; shadows enable; corner_radius 12
 layer_effects "swaync-control-center" blur enable; shadows enable; corner_radius 16
 layer_effects "swaync-notification-window" shadows enable; corner_radius 12
 layer_effects "gtk-layer-shell" blur enable; shadows enable
