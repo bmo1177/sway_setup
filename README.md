@@ -105,7 +105,7 @@ workspace you are on, so links stay put.
 | Super+1..0, Super+F11/F12 | Workspaces 1–12 (Shift moves windows) |
 | Alt+Tab, Super+Tab | Window / workspace switcher |
 | Super+W | Wallpaper picker + auto-theme |
-| Super+Shift+E / Super+Ctrl+L | Power menu / lock |
+| Super+Shift+E / Super+L | Power menu / lock |
 | Super+Shift+X | Screen off/on toggle |
 | Super+I | Keystroke overlay (recordings) |
 | Super+O | Idle-inhibit toggle (`~/.local/bin/sway-inhibit-toggle`) |

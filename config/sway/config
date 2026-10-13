@@ -69,7 +69,9 @@ bindsym $mod+q kill
 bindsym $mod+Shift+q kill
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+e exec wlogout  # was sway-power script; still in $scripts as fallback
-bindsym $mod+Ctrl+l exec $scripts/sway-lock
+# Super+L locks (Windows-style). It replaces vim-style focus-right here —
+# use Super+Right arrow for focus right; Super+H/J/K still work.
+bindsym $mod+l exec $scripts/sway-lock
 
 # --- binnewbs ports: wallpaper picker, waybar style/layout, hide bar ---
 bindsym $mod+w exec $scripts/sway-wallpaper
@@ -88,7 +90,7 @@ bindsym $mod+Right focus right
 bindsym $mod+h focus left
 bindsym $mod+j focus down
 bindsym $mod+k focus up
-bindsym $mod+l focus right
+# ($mod+l locks the screen — Super+Right focuses right instead.)
 bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
