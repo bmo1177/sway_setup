@@ -32,8 +32,6 @@
     "custom/separator#blank",
     "group/system",
     "network",
-    "bluetooth",
-    "backlight",
     "custom/separator#blank",
     "group/audio",
     "custom/separator#blank",
