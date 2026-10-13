@@ -69,9 +69,11 @@ bindsym $mod+q kill
 bindsym $mod+Shift+q kill
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+e exec wlogout  # was sway-power script; still in $scripts as fallback
-# Super+L locks (Windows-style). It replaces vim-style focus-right here —
-# use Super+Right arrow for focus right; Super+H/J/K still work.
-bindsym $mod+l exec $scripts/sway-lock
+# Super+L locks (Windows-style). --to-code binds the PHYSICAL key: plain
+# bindsym matches the 'l' keysym, which doesn't exist while the Arabic
+# layout is active (security hole — lock must work in both layouts).
+# It replaces vim-style focus-right here — use Super+Right arrow instead.
+bindsym --to-code $mod+l exec $scripts/sway-lock
 
 # --- binnewbs ports: wallpaper picker, waybar style/layout, hide bar ---
 bindsym $mod+w exec $scripts/sway-wallpaper
