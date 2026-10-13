@@ -11,7 +11,8 @@ set -euo pipefail
 # matches and every restart would stack another bar.
 if command -v swaync >/dev/null 2>&1; then
     pkill -f '^swaync( |$)' || true
-    swaymsg exec swaync >/dev/null 2>&1 || true
+    # Same style flag as sway's autostart line, or the bar comes back unthemed.
+    swaymsg exec 'swaync -s ~/.config/swaync/style.css' >/dev/null 2>&1 || true
 fi
 pkill -f '^waybar( |$)' || true
 # The swaync drawer module spawns a persistent swaync-client subscriber per

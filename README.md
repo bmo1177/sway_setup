@@ -93,6 +93,9 @@ workspace you are on, so links stay put.
 - `python3 -m json.tool ~/.config/waybar/config` validates the Waybar JSON.
 - Missing binary warnings from `./install.sh` → rebuild with `nixos/sway.nix`.
 - Double Waybar after reload → `Super+R` (`waybar-restart` kills `-wrapped` binaries correctly).
+- `swaync.service` user unit is intentionally masked: sway itself autostarts
+  `swaync -s ~/.config/swaync/style.css`, so the systemd duplicate only
+  restart-looped (`start-limit-hit`). Unmask if you ever drop the `exec` line.
 - `swayrd` socket stale → Alt+Tab/Super+Tab self-heal and restart the daemon.
 - No wallpaper at login → drop images in `~/Pictures/wallpapers`, press `Super+W`.
 
