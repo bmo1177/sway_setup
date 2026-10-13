@@ -6,10 +6,11 @@ and a full recording setup for tech content. Built on NixOS 26.05 alongside GNOM
 
 ## Screenshots
 
-![Desktop](screenshots/desktop.png)
-![App launcher](screenshots/launcher.png)
-![Window switcher](screenshots/switcher.png)
-![Power menu](screenshots/powermenu.png)
+| | | |
+|---|---|---|
+| ![Desktop](screenshots/desktop.png)<br>**Desktop** — islands bar, `us` layout flag, race wallpaper | ![Tiled session](screenshots/work.png)<br>**Tiled session** — fastfetch + yazi wallpaper library | ![App launcher](screenshots/launcher.png)<br>**Launcher** — fuzzel drun (`Super+D`) |
+| ![Window switcher](screenshots/switcher.png)<br>**Switcher** — swayr across workspaces (`Alt+Tab`) | ![Power menu](screenshots/powermenu.png)<br>**Power menu** — wlogout (`Super+Shift+E`) | ![Wallpaper picker](screenshots/wallpaper.png)<br>**Wallpaper picker** — auto-theme (`Super+W`) |
+| | ![Cheatsheet](screenshots/cheatsheet.png)<br>**Cheatsheet** — every shortcut (`Super+/`) | |
 
 ## Quick reinstall
 
