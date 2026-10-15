@@ -1,17 +1,42 @@
 #!/usr/bin/env bash
-# sway-lock — lock screen on the current wallpaper.
-# Port of binnewbs' hyprlock.sh (which blurs current_wallpaper) for swaylock.
+# sway-lock — sharp wallpaper bg + big clock + ring colors from Matugen.
+# The wheel follows the wallpaper: primary/tertiary/surface re-read at lock time.
 set -euo pipefail
 
+CSS="$HOME/.config/waybar/colors.css"
 WALLPAPER="$HOME/.config/sway/current_wallpaper"
-ARGS=(-f --color 11111b --inside-color 1e1e2e --inside-clear-color 1e1e2e \
-    --inside-caps-lock-color 1e1e2e --inside-ver-color 1e1e2e --inside-wrong-color 1e1e2e \
-    --ring-color cba6f7 --ring-clear-color f9e2af --ring-caps-lock-color f38ba8 \
-    --ring-ver-color a6e3a1 --ring-wrong-color f38ba8 --key-hl-color a6e3a1 \
-    --line-color 1e1e2e --separator-color cba6f7 --text-color cdd6f4)
+
+pick() { # $1 = color name, $2 = fallback
+    local v=""
+    v=$(grep -E "@define-color $1 " "$CSS" 2>/dev/null | awk '{print $3}' | tr -d ';#' || true)
+    [[ "$v" =~ ^[0-9a-fA-F]{6}$ ]] && printf '%s' "$v" || printf '%s' "$2"
+}
+
+RING=$(pick primary cba6f7)          # wheel = wallpaper accent
+INSIDE=$(pick surface 1e1e2e)        # wheel fill = wallpaper dark
+TEXT=$(pick on_surface cdd6f4)       # clock + labels
+VER=$(pick tertiary a6e3a1)          # verifying = wallpaper tertiary
+WRONG=$(pick error f38ba8)           # wrong password
+CLEAR=$(pick primary_container f9e2af)
+
+ARGS=(-f --indicator --clock --timestr "%H:%M" --datestr "%a, %d %b"
+    --font "Inter" --font-size 54
+    --fade-in 0.2 --grace 2
+    --effect-vignette 0.5:0.6
+    --color 11111b --inside-color "$INSIDE" --inside-clear-color "$INSIDE"
+    --inside-caps-lock-color "$INSIDE" --inside-ver-color "$INSIDE" --inside-wrong-color "$INSIDE"
+    --ring-color "$RING" --ring-clear-color "$CLEAR" --ring-caps-lock-color "$WRONG"
+    --ring-ver-color "$VER" --ring-wrong-color "$WRONG" --key-hl-color "$VER"
+    --line-color "$INSIDE" --separator-color "$RING" --text-color "$TEXT")
 
 if [ -f "$WALLPAPER" ]; then
-    exec swaylock -i "$WALLPAPER" "${ARGS[@]}"
-else
+    ARGS=(-i "$WALLPAPER" "${ARGS[@]}")
+fi
+
+if readlink -f "$(command -v swaylock)" 2>/dev/null | grep -q "swaylock-effects"; then
     exec swaylock "${ARGS[@]}"
+else
+    exec swaylock -f -i "${WALLPAPER:-}" --clock --timestr "%H:%M" --datestr "%a, %d %b" \
+        --inside-color "$INSIDE" --ring-color "$RING" --key-hl-color "$VER" \
+        --line-color "$INSIDE" --separator-color "$RING" --text-color "$TEXT"
 fi

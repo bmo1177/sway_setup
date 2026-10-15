@@ -167,6 +167,8 @@
     "tooltip-format-ethernet": "{ifname} 󰌘",
     "tooltip-format-disconnected": "󰌙 Disconnected",
     "max-length": 30,
+    "on-click": "foot nmtui",
+    "on-click-right": "nmcli radio wifi toggle",
     "format-icons": [
       "󰤯",
       "󰤟",
