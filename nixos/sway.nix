@@ -5,10 +5,11 @@
 #
 # then:  sudo nixos-rebuild switch
 #
-# Installs every binary referenced by ~/.config (sway, waybar, foot,
+# Installs every binary referenced by ~/.config (swayfx, waybar, foot,
 # fuzzel, swaync, kanshi, grim/slurp/swappy, wl-clipboard/cliphist,
 # brightness/volume/media controls, idle/lock, wallpaper + theming,
-# night light, file managers, polkit agent, recording apps).
+# night light, file managers, polkit agent, recording apps) plus the
+# fonts the bar and lock screen need.
 # sway-binnewbs-snippet.nix is the minimal paste-in fragment; this file
 # is the full importable equivalent.
 # =====================================================================
@@ -27,6 +28,12 @@
 
   programs.sway = {
     enable = true;
+    # The rice uses SwayFX-only directives (blur, shadows, corner_radius,
+    # layer_effects in ~/.config/sway/config). Plain sway logs
+    # "Unknown/invalid command" for every one of them at login — swaynag
+    # error box — and drops all the eye candy. Keep swayfx here.
+    package = pkgs.swayfx;
+    wrapperFeatures.gtk = true;
     extraPackages = with pkgs; [
       # --- rice core ---
       matugen
@@ -53,7 +60,10 @@
       playerctl
       # --- idle / lock ---
       swayidle
-      swaylock
+      # sway-lock script needs swaylock-effects (--clock/--timestr/
+      # --fade-in/--effect-vignette are effects-only; plain swaylock
+      # exits on those and the screen would stay unlocked).
+      swaylock-effects
       # --- wallpaper / theming ---
       ffmpeg
       nwg-look
@@ -75,4 +85,12 @@
       dpkg
     ];
   };
+
+  # Fonts the rice expects: Nerd Font for bar/terminal/launcher glyphs,
+  # Inter for the lock-screen clock, color emoji for notifications.
+  fonts.packages = with pkgs; [
+    nerd-fonts.jetbrains-mono
+    noto-fonts-color-emoji
+    inter
+  ];
 }

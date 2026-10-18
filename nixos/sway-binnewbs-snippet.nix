@@ -1,6 +1,6 @@
 # =====================================================================
 # Sway binnewbs-rice additions — paste into /etc/nixos/configuration.nix
-# next to the Phase 1 / Phase 2 blocks, then:
+# (merge the list into programs.sway.extraPackages), then:
 #   sudo nixos-rebuild switch
 #
 # What it adds (ports of binnewbs/arch-hyprland pieces already configured
@@ -43,6 +43,8 @@
     kdenlive
     polkit_gnome
   ];
-# Full importable version with every runtime dep
-# (grim/slurp/swappy, wl-clipboard/cliphist, pamixer/brightnessctl/playerctl,
-# swayidle/swaylock, ffmpeg, nautilus, etc.): see sway.nix in this directory.
+# Full importable version with every runtime dep — incl. the swayfx
+# package (blur/shadows/rounding), swaylock-effects and the bar/lock
+# fonts (grim/slurp/swappy, wl-clipboard/cliphist, pamixer/brightnessctl/
+# playerctl, swayidle, ffmpeg, nautilus, etc.): see sway.nix in this
+# directory. Prefer importing that over pasting this fragment.

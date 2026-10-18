@@ -36,7 +36,16 @@ fi
 if readlink -f "$(command -v swaylock)" 2>/dev/null | grep -q "swaylock-effects"; then
     exec swaylock "${ARGS[@]}"
 else
-    exec swaylock -f -i "${WALLPAPER:-}" --clock --timestr "%H:%M" --datestr "%a, %d %b" \
-        --inside-color "$INSIDE" --ring-color "$RING" --key-hl-color "$VER" \
-        --line-color "$INSIDE" --separator-color "$RING" --text-color "$TEXT"
+    # Plain swaylock fallback: --clock/--timestr/--datestr/--fade-in/--grace/
+    # --effect-vignette are swaylock-effects-only — passing them makes plain
+    # swaylock exit with an error and the screen stays unlocked. Keep only
+    # the flags it understands.
+    COMMON=(-f --color 11111b --inside-color "$INSIDE" --ring-color "$RING"
+        --key-hl-color "$VER" --line-color "$INSIDE"
+        --separator-color "$RING" --text-color "$TEXT")
+    if [ -f "$WALLPAPER" ]; then
+        exec swaylock -i "$WALLPAPER" "${COMMON[@]}"
+    else
+        exec swaylock "${COMMON[@]}"
+    fi
 fi
