@@ -41,8 +41,3 @@ output_path = '~/.config/starship/starship.toml'
 [templates.fzf]
 input_path = '~/.config/matugen/templates/fzf-colors.sh'
 output_path = '~/.config/fzf/colors.sh'
-
-[templates.tmux]
-input_path = '~/.config/matugen/templates/tmux-colors.conf'
-output_path = '~/.config/tmux/theme.conf'
-post_hook = 'tmux source-file /etc/tmux.conf 2>/dev/null || true'
