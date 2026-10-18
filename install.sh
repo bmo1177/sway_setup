@@ -34,7 +34,7 @@ if [ -L "$HOME/.config/sway/current_wallpaper" ]; then
     cp -a "$HOME/.config/sway/current_wallpaper" "$PRESERVED_TMP/current_wallpaper-link"
 fi
 for f in sway/colors waybar/colors.css foot/colors.ini fuzzel/colors.ini \
-         starship/starship.toml fzf/colors.sh; do
+         starship/starship.toml fzf/colors.sh tmux/theme.conf; do
     if [ -f "$HOME/.config/$f" ]; then
         mkdir -p "$PRESERVED_TMP/$(dirname "$f")"
         cp -a "$HOME/.config/$f" "$PRESERVED_TMP/$f"
@@ -51,7 +51,7 @@ if [ -e "$PRESERVED_TMP/current_wallpaper-link" ]; then
     echo "    preserved current_wallpaper -> $(readlink "$HOME/.config/sway/current_wallpaper")"
 fi
 for f in sway/colors waybar/colors.css foot/colors.ini fuzzel/colors.ini \
-         starship/starship.toml fzf/colors.sh; do
+         starship/starship.toml fzf/colors.sh tmux/theme.conf; do
     if [ -f "$PRESERVED_TMP/$f" ]; then
         mkdir -p "$HOME/.config/$(dirname "$f")"
         cp -a "$PRESERVED_TMP/$f" "$HOME/.config/$f"

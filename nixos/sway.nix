@@ -154,4 +154,63 @@
       fi
     '';
   };
+
+  # ---------------------------------------------------------------------
+  # tmux: Ctrl-a prefix, vi keys, session persistence (resurrect +
+  # continuum), tmux-which-key menu. Config lands in /etc/tmux.conf; the
+  # status bar, borders and menus come from matugen (~/.config/tmux/
+  # theme.conf, regenerated on Super+W — like foot/starship/fzf).
+  # ---------------------------------------------------------------------
+  programs.tmux = {
+    enable = true;
+    shortcut = "a";
+    baseIndex = 1;
+    clock24 = true;
+    keyMode = "vi";
+    escapeTime = 0;
+    historyLimit = 50000;
+    terminal = "tmux-256color";
+    newSession = true;
+    plugins = with pkgs.tmuxPlugins; [
+      sensible
+      yank
+      vim-tmux-navigator
+      resurrect
+      continuum
+      tmux-which-key
+    ];
+    extraConfigBeforePlugins = ''
+      # Session persistence (read by resurrect / continuum)
+      set -g @resurrect-capture-pane-contents "on"
+      set -g @continuum-restore "on"
+      set -g @continuum-save-interval "5"
+
+      # tmux-which-key: menu comes from
+      # ~/.config/tmux/plugins/tmux-which-key/config.yaml, rebuilt into
+      # ~/.local/share/tmux/plugins/tmux-which-key/init.tmux on every start.
+      set -g @tmux-which-key-xdg-enable "true"
+    '';
+    extraConfig = ''
+      set -g mouse on
+      set -g renumber-windows on
+      set -g status-keys vi
+      set -g pane-border-status top
+      set -g focus-events on
+      set -gw allow-passthrough on
+
+      # Splits / windows that keep your cwd
+      bind | split-window -h -c "#{pane_current_path}"
+      bind - split-window -v -c "#{pane_current_path}"
+      bind c new-window -c "#{pane_current_path}"
+      bind r source-file /etc/tmux.conf \; display-message "Config reloaded!"
+
+      # Wallpaper theme (matugen): status bar, borders, menus.
+      source-file ~/.config/tmux/theme.conf
+
+      # cpu % (tmux-cpu): the plugin interpolates #{cpu_percentage} in
+      # status-right into its script call, so it must run AFTER the theme
+      # (which sets status-right). Reloads (bind r / Super+W) re-run it.
+      run-shell ${pkgs.tmuxPlugins.cpu}/share/tmux-plugins/cpu/cpu.tmux
+    '';
+  };
 }

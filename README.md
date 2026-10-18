@@ -35,7 +35,7 @@ Restore a backup: `cp -a ~/.config-backup-<timestamp>/<name> ~/.config/<name>`
 |---|---|
 | Compositor | SwayFX 0.5.3 (blur, shadows, rounded corners), 14" 1080p @ 1.25 scale via kanshi |
 | Theme | Catppuccin Mocha everywhere; `Super+W` picker recolors bar, terminal, launcher, GTK from the wallpaper |
-| Terminal / shell | foot — glass (SwayFX blur + alpha), 50k scrollback · matugen-themed starship prompt + fzf · zoxide, eza, bat, fd, fastfetch |
+| Terminal / shell | foot — glass (SwayFX blur + alpha), 50k scrollback · tmux (Ctrl-a, vi keys, session restore, which-key menu, matugen status bar) · themed starship prompt + fzf · zoxide, eza, bat, fd, fastfetch |
 | Bar | Waybar islands: 6 quick launchers, numbered workspaces 1–12, layout flag (us/ara, click to switch), notify drawer, system drawer (cpu/mem/temp), network, audio drawer, idle-inhibit icon, power |
 | Notifications | swaync (themed, canonical, blurred layer) · mako config kept as unused fallback · Power menu: wlogout (themed) |
 | Launcher | fuzzel (drun, clipboard history, wallpaper picker, cheatsheet) |
