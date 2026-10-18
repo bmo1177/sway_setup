@@ -33,3 +33,11 @@ output_path = '~/.config/gtk-3.0/colors.css'
 [templates.gtk4]
 input_path = '~/.config/matugen/templates/gtk-colors.css'
 output_path = '~/.config/gtk-4.0/colors.css'
+
+[templates.starship]
+input_path = '~/.config/matugen/templates/starship.toml'
+output_path = '~/.config/starship/starship.toml'
+
+[templates.fzf]
+input_path = '~/.config/matugen/templates/fzf-colors.sh'
+output_path = '~/.config/fzf/colors.sh'
