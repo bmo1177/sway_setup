@@ -34,12 +34,19 @@ if [ -L "$HOME/.config/sway/current_wallpaper" ]; then
     cp -a "$HOME/.config/sway/current_wallpaper" "$PRESERVED_TMP/current_wallpaper-link"
 fi
 for f in sway/colors waybar/colors.css foot/colors.ini fuzzel/colors.ini \
-         starship/starship.toml fzf/colors.sh; do
+         starship/starship.toml fzf/colors.sh tmux/theme.conf; do
     if [ -f "$HOME/.config/$f" ]; then
         mkdir -p "$PRESERVED_TMP/$(dirname "$f")"
         cp -a "$HOME/.config/$f" "$PRESERVED_TMP/$f"
     fi
 done
+# The live TypeCraft theme bridge uses a local copy of the catppuccin
+# plugin; keep it (and theme.conf above) across re-runs until the NixOS
+# module is rebuilt with the plugin natively.
+if [ -d "$HOME/.config/tmux/plugins/catppuccin" ]; then
+    mkdir -p "$PRESERVED_TMP/tmux/plugins"
+    cp -a "$HOME/.config/tmux/plugins/catppuccin" "$PRESERVED_TMP/tmux/plugins/"
+fi
 for src in "$REPO"/config/*/; do
     name="$(basename "$src")"
     rm -rf "$HOME/.config/$name"
@@ -51,12 +58,16 @@ if [ -e "$PRESERVED_TMP/current_wallpaper-link" ]; then
     echo "    preserved current_wallpaper -> $(readlink "$HOME/.config/sway/current_wallpaper")"
 fi
 for f in sway/colors waybar/colors.css foot/colors.ini fuzzel/colors.ini \
-         starship/starship.toml fzf/colors.sh; do
+         starship/starship.toml fzf/colors.sh tmux/theme.conf; do
     if [ -f "$PRESERVED_TMP/$f" ]; then
         mkdir -p "$HOME/.config/$(dirname "$f")"
         cp -a "$PRESERVED_TMP/$f" "$HOME/.config/$f"
     fi
 done
+if [ -d "$PRESERVED_TMP/tmux/plugins/catppuccin" ]; then
+    mkdir -p "$HOME/.config/tmux/plugins"
+    cp -a "$PRESERVED_TMP/tmux/plugins/catppuccin" "$HOME/.config/tmux/plugins/"
+fi
 echo "    preserved live theme (if any)"
 rm -rf "$PRESERVED_TMP"
 

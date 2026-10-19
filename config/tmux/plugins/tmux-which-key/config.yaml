@@ -6,13 +6,13 @@ keybindings:
 title:
   style: align=centre,bold
   prefix: tmux
-  prefix_style: fg=green,align=centre,bold
+  prefix_style: fg=#a6e3a1,align=centre,bold
 position:
   x: R
   y: P
 custom_variables:
   - name: log_info
-    value: "#[fg=green,italics] [info]#[default]#[italics]"
+    value: "#[fg=#a6e3a1,italics] [info]#[default]#[italics]"
 macros:
   - name: reload-config
     commands:

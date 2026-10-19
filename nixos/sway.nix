@@ -188,9 +188,12 @@
       # truecolor pass-through for xterm-style TERMs
       set -ag terminal-overrides ",xterm-256color:RGB"
       # catppuccin: mocha flavor (default, left shown like his config),
-      # rounded window pills.
+      # rounded window pills, named by window name ("opencode") instead of
+      # the long terminal title.
       # set -g @catppuccin_flavor "mocha"
       set -g @catppuccin_window_status_style "rounded"
+      set -g @catppuccin_window_text " #W"
+      set -g @catppuccin_window_current_text " #W"
 
       # Session persistence (read by resurrect / continuum)
       set -g @resurrect-capture-pane-contents "on"
@@ -214,6 +217,9 @@
       # reload config: his `bind r`, pointed at the nix-managed file.
       unbind r
       bind r source-file /etc/tmux.conf
+
+      # prefix twice sends the prefix through (nested tmux).
+      bind C-s send-prefix
 
       # silent basics: clipboard (yank), mouse, vi keys in the command
       # line, focus events for nvim, image passthrough for yazi.
