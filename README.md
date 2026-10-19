@@ -29,6 +29,21 @@ Flatpaks, re-login).
 
 Restore a backup: `cp -a ~/.config-backup-<timestamp>/<name> ~/.config/<name>`
 
+### NixOS module — flake or copy
+
+Flake-based NixOS configs can import the Sway setup as a module:
+
+```nix
+# flake.nix
+inputs.sway-setup.url = "github:bmo1177/sway_setup";
+
+# configuration.nix
+imports = [ inputs.sway-setup.nixosModules.default ];
+```
+
+Then run `./install.sh` once for the dotfiles (it backs up anything it touches).
+Not on flakes? Copy `nixos/sway.nix` into your config and import it the same way.
+
 ## What's inside
 
 | Area | Details |
