@@ -18,9 +18,8 @@ input_path = '~/.config/matugen/templates/sway-colors'
 output_path = '~/.config/sway/colors'
 post_hook = 'swaymsg reload || true'
 
-[templates.foot]
-input_path = '~/.config/matugen/templates/foot-colors.ini'
-output_path = '~/.config/foot/colors.ini'
+# foot and starship use fixed colors/prompt now (restored from the
+# pre-Sway setup), so they are intentionally not regenerated.
 
 [templates.fuzzel]
 input_path = '~/.config/matugen/templates/fuzzel-colors.ini'
@@ -33,10 +32,6 @@ output_path = '~/.config/gtk-3.0/colors.css'
 [templates.gtk4]
 input_path = '~/.config/matugen/templates/gtk-colors.css'
 output_path = '~/.config/gtk-4.0/colors.css'
-
-[templates.starship]
-input_path = '~/.config/matugen/templates/starship.toml'
-output_path = '~/.config/starship/starship.toml'
 
 [templates.fzf]
 input_path = '~/.config/matugen/templates/fzf-colors.sh'

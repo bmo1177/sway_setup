@@ -40,9 +40,9 @@ for f in sway/colors waybar/colors.css foot/colors.ini fuzzel/colors.ini \
         cp -a "$HOME/.config/$f" "$PRESERVED_TMP/$f"
     fi
 done
-# The live TypeCraft theme bridge uses a local copy of the catppuccin
-# plugin; keep it (and theme.conf above) across re-runs until the NixOS
-# module is rebuilt with the plugin natively.
+# The live tmux theme bridge (Catppuccin full bar) uses a local copy of
+# the catppuccin plugin; keep it (and theme.conf above) across re-runs
+# until the NixOS module is rebuilt with the plugin natively.
 if [ -d "$HOME/.config/tmux/plugins/catppuccin" ]; then
     mkdir -p "$PRESERVED_TMP/tmux/plugins"
     cp -a "$HOME/.config/tmux/plugins/catppuccin" "$PRESERVED_TMP/tmux/plugins/"

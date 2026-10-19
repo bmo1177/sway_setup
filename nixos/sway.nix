@@ -11,7 +11,7 @@
 # night light, file managers, polkit agent, recording apps) plus the
 # fonts the bar and lock screen need, and the terminal/shell quality of
 # life set: eza, bat, zoxide, starship, fd, fastfetch, jq — wired into
-# bash below (aliases, fzf key bindings, matugen-themed prompt).
+# bash below (aliases, fzf key bindings, starship prompt).
 # sway-binnewbs-snippet.nix is the minimal paste-in fragment; this file
 # is the full importable equivalent.
 # =====================================================================
@@ -97,10 +97,10 @@
   ];
 
   # --- terminal / shell quality of life ---------------------------------
-  # Modern CLI tools + bash wiring for the foot terminal. The prompt
-  # (starship) and fzf colors are generated from the wallpaper by matugen:
-  # ~/.config/matugen/templates/{starship.toml,fzf-colors.sh}, applied on
-  # Super+W. STARSHIP_CONFIG points at the matugen output location.
+  # Modern CLI tools + bash wiring for the foot terminal. starship uses a
+  # fixed config (nerd-font-symbols preset, restored from the old GNOME
+  # setup); fzf colors are still generated from the wallpaper by matugen
+  # on Super+W.
   environment.systemPackages = with pkgs; [
     eza
     bat
@@ -135,7 +135,7 @@
         # Tab completion: case-insensitive.
         bind "set completion-ignore-case on" 2>/dev/null || true
 
-        # Prompt (starship) — themed from the wallpaper via matugen.
+        # Prompt (starship) — fixed nerd-font-symbols config.
         export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
         command -v starship >/dev/null 2>&1 && eval "$(starship init bash)"
 
@@ -184,16 +184,18 @@
       catppuccin
     ];
     extraConfigBeforePlugins = ''
-      # --- TypeCraft ---
+      # --- Catppuccin Mocha, full bar (restored from the pre-Sway setup) ---
       # truecolor pass-through for xterm-style TERMs
       set -ag terminal-overrides ",xterm-256color:RGB"
-      # catppuccin: mocha flavor (default, left shown like his config),
-      # rounded window pills, named by window name ("opencode") instead of
-      # the long terminal title.
-      # set -g @catppuccin_flavor "mocha"
+      set -g @catppuccin_flavor "mocha"
       set -g @catppuccin_window_status_style "rounded"
-      set -g @catppuccin_window_text " #W"
-      set -g @catppuccin_window_current_text " #W"
+      set -g @catppuccin_window_flags "icon"
+      set -g @catppuccin_pane_status_enabled "no"
+      set -g @catppuccin_status_background "default"
+      # Window pills show the current directory basename ("devlab"), like
+      # the status-left directory chip.
+      set -g @catppuccin_window_text " #{b:pane_current_path}"
+      set -g @catppuccin_window_current_text " #{b:pane_current_path}"
 
       # Session persistence (read by resurrect / continuum)
       set -g @resurrect-capture-pane-contents "on"
@@ -206,20 +208,81 @@
       set -g @tmux-which-key-xdg-enable "true"
     '';
     extraConfig = ''
-      # --- TypeCraft ---
-      # bar on top, empty left side, catppuccin application + session
-      # segments on the right, transparent bar (no bg color).
+      # --- Catppuccin bar: session + directory | git, uptime, RAM, CPU, time ---
+      # No pane title bar.
+      set -g pane-border-status off
       set -g status-position top
-      set -g status-left ""
-      set -g status-right "#{E:@catppuccin_status_application} #{E:@catppuccin_status_session}"
       set -g status-style bg=default
 
-      # reload config: his `bind r`, pointed at the nix-managed file.
+      # Custom status chips: git branch (teal) + RAM (peach), inlined from
+      # catppuccin's utils/status_module.conf (nested `source` plus
+      # `%hidden MODULE_NAME` mis-resolves once the theme plugin has queued
+      # its own source files).
+      #
+      # --- git branch ---
+      set -g @catppuccin_gitbranch_icon " "
+      set -gF @catppuccin_gitbranch_color "#{E:@thm_teal}"
+      set -g @catppuccin_gitbranch_text " #(git -C \"#{pane_current_path}\" branch --show-current 2>/dev/null || echo \"·\")"
+      set -gqF @_ctp_connect_style "#{?#{==:#{@catppuccin_status_connect_separator},yes},,#[bg=default]}"
+      set -ogqF @catppuccin_status_gitbranch_icon_fg "#{E:@thm_crust}"
+      set -ogqF @catppuccin_status_gitbranch_text_fg "#{E:@thm_fg}"
+      set -ogqF @catppuccin_status_gitbranch_icon_bg "#{@catppuccin_gitbranch_color}"
+      set -gqF @_ctp_module_text_bg "#{E:@catppuccin_status_module_text_bg}"
+      set -gF @catppuccin_status_gitbranch "#[fg=#{@catppuccin_status_gitbranch_icon_bg}]#{@_ctp_connect_style}#{@catppuccin_status_left_separator}"
+      set -agF @catppuccin_status_gitbranch "#[fg=#{@catppuccin_status_gitbranch_icon_fg},bg=#{@catppuccin_status_gitbranch_icon_bg}]#{@catppuccin_gitbranch_icon}"
+      set -agF @catppuccin_status_gitbranch "#{@catppuccin_status_middle_separator}"
+      set -agF @catppuccin_status_gitbranch "#[fg=#{@catppuccin_status_gitbranch_text_fg},bg=#{@_ctp_module_text_bg}]"
+      set -ag @catppuccin_status_gitbranch "#{E:@catppuccin_gitbranch_text}"
+      set -agF @catppuccin_status_gitbranch "#[fg=#{@_ctp_module_text_bg}]#{@_ctp_connect_style}#{@catppuccin_status_right_separator}"
+      set -ug @_ctp_connect_style
+      set -ug @_ctp_module_text_bg
+
+      # --- RAM ---
+      set -g @catppuccin_ram_icon "󰍛 "
+      set -gF @catppuccin_ram_color "#{E:@thm_peach}"
+      set -g @catppuccin_ram_text " #{l:#{ram_percentage}}"
+      set -gqF @_ctp_connect_style "#{?#{==:#{@catppuccin_status_connect_separator},yes},,#[bg=default]}"
+      set -ogqF @catppuccin_status_ram_icon_fg "#{E:@thm_crust}"
+      set -ogqF @catppuccin_status_ram_text_fg "#{E:@thm_fg}"
+      set -ogqF @catppuccin_status_ram_icon_bg "#{@catppuccin_ram_color}"
+      set -gqF @_ctp_module_text_bg "#{E:@catppuccin_status_module_text_bg}"
+      set -gF @catppuccin_status_ram "#[fg=#{@catppuccin_status_ram_icon_bg}]#{@_ctp_connect_style}#{@catppuccin_status_left_separator}"
+      set -agF @catppuccin_status_ram "#[fg=#{@catppuccin_status_ram_icon_fg},bg=#{@catppuccin_status_ram_icon_bg}]#{@catppuccin_ram_icon}"
+      set -agF @catppuccin_status_ram "#{@catppuccin_status_middle_separator}"
+      set -agF @catppuccin_status_ram "#[fg=#{@catppuccin_status_ram_text_fg},bg=#{@_ctp_module_text_bg}]"
+      set -ag @catppuccin_status_ram "#{E:@catppuccin_ram_text}"
+      set -agF @catppuccin_status_ram "#[fg=#{@_ctp_module_text_bg}]#{@_ctp_connect_style}#{@catppuccin_status_right_separator}"
+      set -ug @_ctp_connect_style
+      set -ug @_ctp_module_text_bg
+
+      # session + directory left; git / uptime / RAM / CPU / clock right.
+      # -agF unwraps #{l:...} so tmux-cpu can substitute its scripts.
+      set -g status-left-length 100
+      set -g status-right-length 100
+      set -g status-left "#{E:@catppuccin_status_session}#{E:@catppuccin_status_directory}"
+      set -g status-right "#{E:@catppuccin_status_gitbranch}"
+      set -ag status-right "#{E:@catppuccin_status_uptime}"
+      set -agF status-right "#{E:@catppuccin_status_ram}"
+      set -agF status-right "#{E:@catppuccin_status_cpu}"
+      set -ag status-right "#{E:@catppuccin_status_date_time}"
+      set -g status-style bg=default
+
+      # tmux-cpu: interpolate #{ram_percentage} / #{cpu_percentage} in the
+      # status-right set above (must run after the status line is defined).
+      run-shell ${pkgs.tmuxPlugins.cpu}/share/tmux-plugins/cpu/cpu.tmux
+
+      # reload config: pointed at the nix-managed file.
       unbind r
       bind r source-file /etc/tmux.conf
 
       # prefix twice sends the prefix through (nested tmux).
       bind C-s send-prefix
+
+      # TypeCraft pane navigation.
+      bind h select-pane -L
+      bind j select-pane -D
+      bind k select-pane -U
+      bind l select-pane -R
 
       # silent basics: clipboard (yank), mouse, vi keys in the command
       # line, focus events for nvim, image passthrough for yazi.
